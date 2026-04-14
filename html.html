@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>兴龙哥的白边马赛克验证码 - 颗粒分明版</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 60px;
+            background-color: #fcfcfc;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            cursor: pointer;
+        }
+        .controls {
+            margin-top: 35px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 19px;
+            cursor: pointer;
+            background-color: #f44336; /* 用醒目的红色 */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        button:hover {
+            background-color: #d32f2f;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        button:active {
+            transform: translateY(2px);
+        }
+        p.tip {
+            color: #999;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>颗粒分明：白边马赛克验证码</h2>
+    <canvas id="mosaicCaptchaCanvas" width="300" height="150" title="点击刷新"></canvas>
+    <p class="tip">（如果很难看清，请多点几次刷新）</p>
+
+    <div class="controls">
+        <button onclick="generateMosaicCaptcha()">刷新验证码 (挑战颗粒分明)</button>
+    </div>
+
+    <script>
+        // 色系配置 - 追求色彩对比与白边干扰
+        // 前景文字色池：强烈的红、橙、褐等
+        const fgColors = ['#d32f2f', '#f44336', '#fb8c00', '#e65100', '#a1887f']; 
+        // 背景色池：强烈的绿、蓝、黄等
+        const bgColors = ['#43a047', '#1e88e5', '#fdd835', '#00acc1', '#81c784']; 
+
+        function generateMosaicCaptcha() {
+            const canvas = document.getElementById('mosaicCaptchaCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 1. 生成随机三位数字，加大难度
+            const text = Math.floor(Math.random() * 900 + 100).toString(); 
+
+            // 2. 离屏Canvas绘制黑字
+            const offCanvas = document.createElement('canvas');
+            offCanvas.width = width;
+            offCanvas.height = height;
+            const offCtx = offCanvas.getContext('2d');
+            
+            // 使用超粗字体，并增加随机旋转和轻微位移
+            offCtx.font = "bold 150px Arial Black";
+            offCtx.fillStyle = "black";
+            offCtx.textAlign = "center";
+            offCtx.textBaseline = "middle";
+            offCtx.rotate((Math.random() - 0.5) * 0.18); // 增加旋转角度
+            offCtx.fillText(text, width / 2 + (Math.random() - 0.5) * 15, height / 2 + 15 + (Math.random() - 0.5) * 15);
+
+            // 获取像素数据
+            const imgData = offCtx.getImageData(0, 0, width, height).data;
+
+            // 3. 清空主画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 保持极细颗粒
+            const step = 3; 
+
+            // 遍历并绘制颗粒
+            for (let y = 0; y < height; y += step) {
+                for (let x = 0; x < width; x += step) {
+                    
+                    // 降低颗粒偏移量，增加颗粒之间的紧凑度
+                    const offsetX = x + (Math.random() - 0.5) * step * 1.0;
+                    const offsetY = y + (Math.random() - 0.5) * step * 1.0;
+                    
+                    // 颗粒基础大小
+                    const size = step * (1.1 + Math.random() * 0.7);
+
+                    // 计算像素索引
+                    const checkX = Math.floor(offsetX);
+                    const checkY = Math.floor(offsetY);
+                    if(checkX < 0 || checkX >= width || checkY < 0 || checkY >= height) continue;
+                    const alphaIndex = (checkY * width + checkX) * 4 + 3;
+                    const isText = imgData[alphaIndex] > 128;
+
+                    // 随机颜色
+                    const colorPool = isText ? fgColors : bgColors;
+                    const color = colorPool[Math.floor(Math.random() * colorPool.length)];
+
+                    // 【核心修改：绘制颗粒分明的不规则多边形，并加上白边】
+                    ctx.beginPath();
+                    
+                    // 随机顶点数 (3到7个)
+                    const vertices = Math.floor(Math.random() * 5) + 3; 
+                    const randomShapeRadius = size;
+                    
+                    for (let i = 0; i < vertices; i++) {
+                        const angle = (i * 2 * Math.PI) / vertices;
+                        // 半径随机抖动
+                        const variedRadius = randomShapeRadius * (0.8 + Math.random() * 0.6); 
+                        const vx = offsetX + Math.cos(angle) * variedRadius;
+                        const vy = offsetY + Math.sin(angle) * variedRadius;
+                        
+                        if (i === 0) {
+                            ctx.moveTo(vx, vy);
+                        } else {
+                            ctx.lineTo(vx, vy);
+                        }
+                    }
+                    ctx.closePath(); 
+
+                    // 填充颜色
+                    ctx.fillStyle = color;
+                    ctx.fill();
+
+                    // 【核心修改：强制加上白色描边】
+                    ctx.lineWidth = 0.8; // 描边宽度
+                    ctx.strokeStyle = 'white'; // 描边颜色
+                    ctx.stroke(); // 描边
+                }
+            }
+        }
+
+        window.onload = generateMosaicCaptcha;
+        document.getElementById('mosaicCaptchaCanvas').addEventListener('click', generateMosaicCaptcha);
+    </script>
+</body>
+</html>

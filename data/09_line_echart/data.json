@@ -1,0 +1,332 @@
+[
+  {
+    "region": "全省",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 75.2,
+        "real_answer_rate": 74.1,
+        "low_satisfaction_repair_rate": 68.5,
+        "accumulated_work_order": 1258
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 76.5,
+        "real_answer_rate": 75.3,
+        "low_satisfaction_repair_rate": 72.1,
+        "accumulated_work_order": 2567
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 77.8,
+        "real_answer_rate": 76.6,
+        "low_satisfaction_repair_rate": 73.4,
+        "accumulated_work_order": 3892
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 78.3,
+        "real_answer_rate": 77.2,
+        "low_satisfaction_repair_rate": 74.6,
+        "accumulated_work_order": 5218
+      }
+    ]
+  },
+  {
+    "region": "贵阳市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 82.5,
+        "real_answer_rate": 81.8,
+        "low_satisfaction_repair_rate": 78.2,
+        "accumulated_work_order": 458
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 83.1,
+        "real_answer_rate": 82.4,
+        "low_satisfaction_repair_rate": 79.5,
+        "accumulated_work_order": 927
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 83.8,
+        "real_answer_rate": 83.1,
+        "low_satisfaction_repair_rate": 80.1,
+        "accumulated_work_order": 1405
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 84.5,
+        "real_answer_rate": 83.8,
+        "low_satisfaction_repair_rate": 80.8,
+        "accumulated_work_order": 1883
+      }
+    ]
+  },
+  {
+    "region": "遵义市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 78.6,
+        "real_answer_rate": 77.5,
+        "low_satisfaction_repair_rate": 72.8,
+        "accumulated_work_order": 326
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 79.3,
+        "real_answer_rate": 78.2,
+        "low_satisfaction_repair_rate": 74.1,
+        "accumulated_work_order": 668
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 80.1,
+        "real_answer_rate": 79.0,
+        "low_satisfaction_repair_rate": 75.4,
+        "accumulated_work_order": 1010
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 80.8,
+        "real_answer_rate": 79.7,
+        "low_satisfaction_repair_rate": 76.2,
+        "accumulated_work_order": 1352
+      }
+    ]
+  },
+  {
+    "region": "六盘水市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 72.4,
+        "real_answer_rate": 71.3,
+        "low_satisfaction_repair_rate": 67.5,
+        "accumulated_work_order": 189
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 73.1,
+        "real_answer_rate": 72.0,
+        "low_satisfaction_repair_rate": 68.8,
+        "accumulated_work_order": 387
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 73.8,
+        "real_answer_rate": 72.7,
+        "low_satisfaction_repair_rate": 69.5,
+        "accumulated_work_order": 585
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 74.5,
+        "real_answer_rate": 73.4,
+        "low_satisfaction_repair_rate": 70.2,
+        "accumulated_work_order": 783
+      }
+    ]
+  },
+  {
+    "region": "安顺市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 74.8,
+        "real_answer_rate": 73.7,
+        "low_satisfaction_repair_rate": 69.9,
+        "accumulated_work_order": 156
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 75.5,
+        "real_answer_rate": 74.4,
+        "low_satisfaction_repair_rate": 71.2,
+        "accumulated_work_order": 321
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 76.2,
+        "real_answer_rate": 75.1,
+        "low_satisfaction_repair_rate": 71.9,
+        "accumulated_work_order": 486
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 76.9,
+        "real_answer_rate": 75.8,
+        "low_satisfaction_repair_rate": 72.6,
+        "accumulated_work_order": 651
+      }
+    ]
+  },
+  {
+    "region": "毕节市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 71.5,
+        "real_answer_rate": 70.4,
+        "low_satisfaction_repair_rate": 66.7,
+        "accumulated_work_order": 287
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 72.2,
+        "real_answer_rate": 71.1,
+        "low_satisfaction_repair_rate": 68.0,
+        "accumulated_work_order": 589
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 72.9,
+        "real_answer_rate": 71.8,
+        "low_satisfaction_repair_rate": 68.7,
+        "accumulated_work_order": 891
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 73.6,
+        "real_answer_rate": 72.5,
+        "low_satisfaction_repair_rate": 69.4,
+        "accumulated_work_order": 1193
+      }
+    ]
+  },
+  {
+    "region": "铜仁市",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 73.6,
+        "real_answer_rate": 72.5,
+        "low_satisfaction_repair_rate": 68.8,
+        "accumulated_work_order": 215
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 74.3,
+        "real_answer_rate": 73.2,
+        "low_satisfaction_repair_rate": 70.1,
+        "accumulated_work_order": 440
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 75.0,
+        "real_answer_rate": 73.9,
+        "low_satisfaction_repair_rate": 70.8,
+        "accumulated_work_order": 665
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 75.7,
+        "real_answer_rate": 74.6,
+        "low_satisfaction_repair_rate": 71.5,
+        "accumulated_work_order": 890
+      }
+    ]
+  },
+  {
+    "region": "黔西南布依族苗族自治州",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 70.8,
+        "real_answer_rate": 69.7,
+        "low_satisfaction_repair_rate": 65.9,
+        "accumulated_work_order": 178
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 71.5,
+        "real_answer_rate": 70.4,
+        "low_satisfaction_repair_rate": 67.2,
+        "accumulated_work_order": 365
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 72.2,
+        "real_answer_rate": 71.1,
+        "low_satisfaction_repair_rate": 67.9,
+        "accumulated_work_order": 552
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 72.9,
+        "real_answer_rate": 71.8,
+        "low_satisfaction_repair_rate": 68.6,
+        "accumulated_work_order": 739
+      }
+    ]
+  },
+  {
+    "region": "黔东南苗族侗族自治州",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 71.2,
+        "real_answer_rate": 70.1,
+        "low_satisfaction_repair_rate": 66.3,
+        "accumulated_work_order": 203
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 71.9,
+        "real_answer_rate": 70.8,
+        "low_satisfaction_repair_rate": 67.6,
+        "accumulated_work_order": 415
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 72.6,
+        "real_answer_rate": 71.5,
+        "low_satisfaction_repair_rate": 68.3,
+        "accumulated_work_order": 627
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 73.3,
+        "real_answer_rate": 72.2,
+        "low_satisfaction_repair_rate": 69.0,
+        "accumulated_work_order": 839
+      }
+    ]
+  },
+  {
+    "region": "黔南布依族苗族自治州",
+    "months": [
+      {
+        "name": "一月",
+        "once_answer_rate": 72.9,
+        "real_answer_rate": 71.8,
+        "low_satisfaction_repair_rate": 68.1,
+        "accumulated_work_order": 195
+      },
+      {
+        "name": "二月",
+        "once_answer_rate": 73.6,
+        "real_answer_rate": 72.5,
+        "low_satisfaction_repair_rate": 69.4,
+        "accumulated_work_order": 400
+      },
+      {
+        "name": "三月",
+        "once_answer_rate": 74.3,
+        "real_answer_rate": 73.2,
+        "low_satisfaction_repair_rate": 70.1,
+        "accumulated_work_order": 605
+      },
+      {
+        "name": "四月",
+        "once_answer_rate": 75.0,
+        "real_answer_rate": 73.9,
+        "low_satisfaction_repair_rate": 70.8,
+        "accumulated_work_order": 810
+      }
+    ]
+  }
+]

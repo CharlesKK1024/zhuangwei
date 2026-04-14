@@ -1,0 +1,3031 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>运营数据监控看板</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style/index.css" />
+  </head>
+
+  <body class="p-4 md:p-6">
+    <div class="dashboard-grid dashboard-grid-quality">
+      <!-- 服务质量指标变化趋势 -->
+      <section id="qualityTrendSection" class="glass-panel rounded-xl p-4 fade-in module-quality-left">
+        <div class="section-header flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-base font-semibold text-blue-custom">服务质量指标变化趋势</h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="qualityTrendSubtitle">全省</p>
+          </div>
+          <div class="stat2-select" id="qualityTrendSelect">
+            <div id="qualityTrendSelectBtn" class="stat2-select-btn">
+              <span id="qualityTrendSelectLabel">全省</span>
+              <span class="stat2-caret"></span>
+            </div>
+            <div id="qualityTrendSelectMenu" class="stat2-select-menu hidden"></div>
+          </div>
+        </div>
+        <div id="qualityTrendChart" class="stat2-chart"></div>
+      </section>
+
+      <!-- 装维人员得分情况 -->
+      <section id="qualityScorePieSection" class="glass-panel rounded-xl p-4 fade-in module-quality-right">
+        <div class="section-header flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-base font-semibold text-blue-custom">装维人员得分情况</h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="qualityScorePieSubtitle">全省</p>
+          </div>
+          <div class="stat2-select" id="qualityScorePieSelect">
+            <div id="qualityScorePieSelectBtn" class="stat2-select-btn">
+              <span id="qualityScorePieSelectLabel">全省</span>
+              <span class="stat2-caret"></span>
+            </div>
+            <div id="qualityScorePieSelectMenu" class="stat2-select-menu hidden"></div>
+          </div>
+        </div>
+        <div id="qualityScorePieChart" class="stat2-chart"></div>
+      </section>
+    </div>
+
+    <div class="glass-panel rounded-xl px-4 py-3 mb-4 fade-in">
+      <div class="flex items-center justify-start flex-wrap gap-3">
+        <div class="flex items-center gap-2">
+          <div class="w-1 h-5 rounded bg-gradient-to-b from-blue-500 to-violet-500"></div>
+          <div class="text-sm font-semibold text-slate-800">运营数据监控看板</div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[13px] text-slate-600 font-medium">时间粒度</span>
+          <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white/80 shadow-sm px-2 py-1">
+            <select
+              id="granularitySelect2"
+              class="h-8 px-2 text-[13px] rounded-md border border-slate-300 bg-white hover:border-slate-400 focus:outline-none cursor-pointer"
+              onchange="toggleDateInput2()"
+            >
+              <option value="day">日粒度</option>
+              <option value="month">月粒度</option>
+            </select>
+            <input
+              type="date"
+              id="dayInput2"
+              class="h-8 px-2 text-[13px] rounded-md border border-slate-300 bg-white hover:border-slate-400 focus:outline-none  datepicker-input"
+              onchange="refreshAllData2()"
+            />
+            <input
+              type="month"
+              id="monthInput2"
+              class="h-8 px-2 text-[13px] rounded-md border border-slate-300 bg-white hover:border-slate-400 focus:outline-none  datepicker-input hidden"
+              onchange="refreshAllData2()"
+            />
+            <div
+              id="loadingSpinner2"
+              class="hidden w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <main class="dashboard-grid">
+      <!-- 第三行：宽带故障报修情况统计（独占一行） -->
+      <section id="broadbandSection" class="glass-panel rounded-xl p-4 fade-in module-1">
+        <div
+          class="section-header flex justify-between items-center flex-wrap gap-2"
+        >
+          <div class="flex items-center gap-4">
+            <div>
+              <h2 class="text-base font-semibold text-blue-custom">
+                宽带故障报修情况统计
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5" id="subtitle2">
+                全省数据汇总
+              </p>
+            </div>
+          </div>
+
+          <div id="breadcrumb2" class="breadcrumb hidden"></div>
+        </div>
+
+        <button id="backBtn2" class="back-btn hidden" onclick="drillUp2()">
+          ← 返回上级
+        </button>
+
+        <div class="table-container" id="tableContainer2">
+          <table class="data-table" id="table2">
+            <thead id="thead2">
+              <!-- 动态生成表头 -->
+            </thead>
+            <tbody id="tbody2">
+              <!-- 数据由JS填充 -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 明细视图容器 -->
+        <div id="detailView2" class="detail-view hidden fade-in">
+          <!-- 动态生成明细内容 -->
+        </div>
+      </section>
+
+      <!-- 真实接通率低于85%的装维人员情况统计 -->
+      <section id="lowScoreSection" class="glass-panel rounded-xl p-4 fade-in module-2">
+        <div
+          class="section-header flex justify-between items-center flex-wrap gap-2"
+        >
+          <div>
+            <h2
+              class="text-base font-semibold text-blue-custom flex items-center gap-2"
+            >
+              真实接通率低于85%的装维人员情况统计
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="subtitle33">
+              全省数据汇总
+            </p>
+          </div>
+          <div id="breadcrumb33" class="breadcrumb hidden"></div>
+        </div>
+
+        <button
+          id="backBtn33"
+          class="back-btn hidden"
+          onclick="drillUpLowScore()"
+        >
+          ← 返回上级
+        </button>
+
+        <div class="table-container" id="tableContainer33">
+          <table class="data-table" id="table33">
+            <thead id="thead33">
+              <tr>
+                <th>地市</th>
+                <th>人数</th>
+                <th>真实接通率(%)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody33"></tbody>
+          </table>
+        </div>
+
+        <!-- 明细视图容器 -->
+        <div id="detailView33" class="detail-view hidden fade-in">
+          <!-- 动态生成明细内容 -->
+        </div>
+      </section>
+
+      <!-- 工单及时率低于95%的装维人员情况统计 -->
+      <section id="gdjs95Section" class="glass-panel rounded-xl p-4 fade-in module-3">
+        <div
+          class="section-header flex justify-between items-center flex-wrap gap-2"
+        >
+          <div>
+            <h2
+              class="text-base font-semibold text-blue-custom flex items-center gap-2"
+            >
+              工单及时率低于95%的装维人员情况统计
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="subtitle34">
+              全省数据汇总
+            </p>
+          </div>
+          <div id="breadcrumb34" class="breadcrumb hidden"></div>
+        </div>
+
+        <button
+          id="backBtn34"
+          class="back-btn hidden"
+          onclick="drillUpGdjs95()"
+        >
+          ← 返回上级
+        </button>
+
+        <div class="table-container" id="tableContainer34">
+          <table class="data-table" id="table34">
+            <thead id="thead34">
+              <tr>
+                <th>地市</th>
+                <th>人数</th>
+                <th>工单及时率(%)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody34"></tbody>
+          </table>
+        </div>
+
+        <!-- 明细视图容器 -->
+        <div id="detailView34" class="detail-view hidden fade-in">
+          <!-- 动态生成明细内容 -->
+        </div>
+      </section>
+
+      <!-- 低满意度用户情况统计 -->
+      <section id="satisfactionSection" class="glass-panel rounded-xl p-4 fade-in module-5">
+        <div class="section-header">
+          <h2 class="text-base font-semibold text-blue-custom">
+            低满意度用户情况统计
+          </h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>地市</th>
+                <th>不满数（户）</th>
+                <th>派单修复数</th>
+                <th>修复成功率(%)</th>
+                <th>满意度平均分</th>
+              </tr>
+            </thead>
+            <tbody id="tbody4"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 工作号码接入情况统计 - 添加下钻功能 -->
+      <section id="workNumbersSection" class="glass-panel rounded-xl p-4 fade-in module-4">
+        <div
+          class="section-header flex justify-between items-center flex-wrap gap-2"
+        >
+          <div>
+            <h2 class="text-base font-semibold text-blue-custom">
+              工作号码接入情况统计
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="subtitle1">
+              全省数据汇总
+            </p>
+          </div>
+          <div id="breadcrumb1" class="breadcrumb hidden"></div>
+        </div>
+
+        <button id="backBtn1" class="back-btn hidden" onclick="drillUp1()">
+          ← 返回上级
+        </button>
+
+        <div class="table-container" id="tableContainer1">
+          <table class="data-table" id="table1">
+            <thead id="thead1">
+              <tr>
+                <th>地市</th>
+                <th>工作号数量</th>
+                <th>总人数</th>
+                <th>工作号接入占比(%)</th>
+                <th>端口量</th>
+              </tr>
+            </thead>
+            <tbody id="tbody1"></tbody>
+          </table>
+        </div>
+
+        <!-- 明细视图容器 -->
+        <div id="detailView1" class="detail-view hidden fade-in">
+          <!-- 动态生成明细内容 -->
+        </div>
+      </section>
+
+      <!-- 客户离网倾向情况统计 -->
+      <section id="customersSection" class="glass-panel rounded-xl p-4 fade-in module-6">
+        <div class="section-header">
+          <h2 class="text-base font-semibold text-blue-custom">
+            客户离网倾向情况统计
+          </h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>地市</th>
+                <th>倾向数（户）</th>
+                <th>派单修复数</th>
+                <th>派单闭环率(%)</th>
+                <th>离网数</th>
+              </tr>
+            </thead>
+            <tbody id="tbody5"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 商机挖掘情况统计 -->
+      <section id="businessSection" class="glass-panel rounded-xl p-4 fade-in module-7">
+        <div class="section-header">
+          <h2 class="text-base font-semibold text-blue-custom">
+            商机挖掘情况统计
+          </h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>地市</th>
+                <th>商机识别数</th>
+                <th>业务办理工单数</th>
+                <th>办理成功数</th>
+                <th>办理成功率(%)</th>
+              </tr>
+            </thead>
+            <tbody id="tbody3"></tbody>
+          </table> 
+        </div>
+      </section>
+      <section id="improvementSection" class="glass-panel rounded-xl p-4 fade-in module-8-left hidden">
+        <div class="section-header flex justify-between items-center flex-wrap gap-2">
+          <div>
+            <h2 class="text-base font-semibold text-blue-custom">装维服务质量环比改善情况</h2>
+          </div>
+          <div id="breadcrumbStat2" class="breadcrumb hidden"></div>
+        </div>
+        <button id="backBtnStat2" class="back-btn hidden" onclick="drillUpStat2()">
+          ← 返回上级
+        </button>
+        <div class="table-container stat2-table-scroll">
+          <table class="data-table" id="tableImprovement">
+            <thead id="theadImprovement"></thead>
+            <tbody id="tbodyImprovement">
+              <tr class="table-empty-row">
+                <td colspan="7">
+                  <div class="table-empty">暂无数据</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="utils/headers.js"></script>
+    <script src="utils/requests.js"></script>
+    <script src="utils/formatters.js"></script>
+    <script src="utils/dashboardConfig.js"></script>
+    <script src="utils/lib/echarts.min.js"></script>
+    <script src="utils/echarts/qualityStat2.js"></script>
+    <script src="utils/echarts/qualityScorePie.js"></script>
+    <script src="utils/options.js"></script>
+    <script>
+      // ==========================================
+      // 级联选择器逻辑
+      // ==========================================
+
+      function setupCascadingSelect(
+        selectId,
+        selectBtnId,
+        selectLabelId,
+        selectMenuId,
+        subtitleId,
+        onChangeCallback,
+      ) {
+        const selectBtn = document.getElementById(selectBtnId);
+        const selectLabel = document.getElementById(selectLabelId);
+        const selectMenu = document.getElementById(selectMenuId);
+        const subtitleEl = document.getElementById(subtitleId);
+
+        let currentSelected = {
+          province: "全省",
+          city: null,
+          district: null
+        };
+
+        function renderSelectMenu(data, level, parentName = "") {
+          selectMenu.innerHTML = "";
+
+          // 返回上一级按钮
+          if (level !== "city") {
+            const backOption = document.createElement("div");
+            backOption.className = "stat2-select-item text-blue-500 font-medium";
+            backOption.innerHTML = `← 返回上一级`;
+            backOption.onclick = (e) => {
+              e.stopPropagation();
+              if (level === "district") {
+                currentSelected.district = null;
+                updateSelectLabel();
+                renderSelectMenu(guizhouData[0].children, "city");
+                onChangeCallback(currentSelected);
+              }
+            };
+            selectMenu.appendChild(backOption);
+          }
+
+          // 只有在地市级别才显示"全省"选项，区县级别不显示默认选项
+          if (level === "city") {
+            const allOption = document.createElement("div");
+            allOption.className = "stat2-select-item";
+            allOption.textContent = "全省";
+            allOption.onclick = () => {
+              currentSelected.city = null;
+              currentSelected.district = null;
+              updateSelectLabel();
+              selectMenu.classList.add("hidden");
+              onChangeCallback(currentSelected);
+            };
+            selectMenu.appendChild(allOption);
+          }
+
+          data.forEach((item) => {
+            const option = document.createElement("div");
+            option.className = "stat2-select-item";
+            // 如果有子级，显示右箭头指示可以展开
+            const hasChildren = item.children && item.children.length > 0;
+            option.innerHTML = `
+              <span class="flex-1">${item.name}</span>
+              ${hasChildren ? '<span class="text-slate-400 text-xs ml-2">▶</span>' : ''}
+            `;
+            option.onclick = (e) => {
+              e.stopPropagation();
+              if (level === "province") {
+                currentSelected = { province: item.name, city: null, district: null };
+              } else if (level === "city") {
+                currentSelected.city = item.name;
+                currentSelected.district = null;
+              } else {
+                currentSelected.district = item.name;
+              }
+              updateSelectLabel();
+              if (hasChildren) {
+                renderSelectMenu(item.children, level === "province" ? "city" : "district", item.name);
+              } else {
+                selectMenu.classList.add("hidden");
+              }
+              onChangeCallback(currentSelected);
+            };
+            selectMenu.appendChild(option);
+          });
+        }
+
+        function updateSelectLabel() {
+          let label = currentSelected.province;
+          if (currentSelected.city) {
+            label += ` - ${currentSelected.city}`;
+          }
+          if (currentSelected.district) {
+            label += ` - ${currentSelected.district}`;
+          }
+          selectLabel.textContent = label;
+          subtitleEl.textContent = label;
+        }
+
+        selectBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          selectMenu.classList.toggle("hidden");
+          if (!selectMenu.classList.contains("hidden")) {
+            // 根据当前选择状态渲染对应的层级
+            if (currentSelected.city) {
+              const cityData = guizhouData[0].children.find(c => c.name === currentSelected.city);
+              if (cityData && cityData.children) {
+                renderSelectMenu(cityData.children, "district", cityData.name);
+              } else {
+                renderSelectMenu(guizhouData[0].children, "city");
+              }
+            } else {
+              renderSelectMenu(guizhouData[0].children, "city"); // Start from cities
+            }
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!selectId || !document.getElementById(selectId).contains(e.target)) {
+            selectMenu.classList.add("hidden");
+          }
+        });
+
+        updateSelectLabel();
+        onChangeCallback(currentSelected); // Initial call
+      }
+
+      // Setup for Quality Trend Section
+      let qualityTrendSelectState = { province: "全省", city: null, district: null };
+      setupCascadingSelect(
+        "qualityTrendSelect",
+        "qualityTrendSelectBtn",
+        "qualityTrendSelectLabel",
+        "qualityTrendSelectMenu",
+        "qualityTrendSubtitle",
+        (selected) => {
+          qualityTrendSelectState = selected;
+          console.log("Quality Trend Selected:", qualityTrendSelectState);
+          // Trigger data refresh for quality trend chart
+          // refreshQualityTrendChart(qualityTrendSelectState);
+        },
+      );
+
+      // Setup for Quality Score Pie Section
+      let qualityScorePieSelectState = { province: "全省", city: null, district: null };
+      setupCascadingSelect(
+        "qualityScorePieSelect",
+        "qualityScorePieSelectBtn",
+        "qualityScorePieSelectLabel",
+        "qualityScorePieSelectMenu",
+        "qualityScorePieSubtitle",
+        (selected) => {
+          qualityScorePieSelectState = selected;
+          console.log("Quality Score Pie Selected:", qualityScorePieSelectState);
+          // Trigger data refresh for quality score pie chart
+          if (window.refreshQualityScorePieChart) {
+            window.refreshQualityScorePieChart(qualityScorePieSelectState);
+          }
+        },
+      );
+    </script>
+    <script>
+      function sanitizePage() {
+        const tables = document.querySelectorAll(".data-table");
+        tables.forEach((table) => {
+          const cells = table.querySelectorAll("td");
+          cells.forEach((cell) => {
+            const text = cell.textContent.trim();
+            if (text === "NaN" || text === "null" || text === "undefined") {
+              cell.textContent = "0";
+            }
+          });
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const observer = new MutationObserver((mutationsList) => {
+          for (const mutation of mutationsList) {
+            if (mutation.type === "childList") {
+              sanitizePage();
+            }
+          }
+        });
+
+        const mainContent = document.querySelector("main");
+        if (mainContent) {
+          observer.observe(mainContent, { childList: true, subtree: true });
+        }
+
+        sanitizePage();
+      });
+    </script>
+    <script>
+      // ==========================================
+      // 数据配置区域
+      // ==========================================
+
+      // 省级汇总数据 
+      let provinceData = [];
+      // 地市数据
+      let districtData = {};
+      // 明细数据（真实数据）
+      let detailData = {};
+
+      function getDashboardModulesConfig() {
+        const cfg =
+          window.DashboardConfig && window.DashboardConfig.modules
+            ? window.DashboardConfig.modules
+            : {};
+        return cfg || {};
+      }
+
+      function normalizeWidth(val, fallback) {
+        const v = val == null ? fallback : val;
+        if (v === 100 || v === "100" || v === "full" || v === "FULL") return 100;
+        return 50;
+      }
+
+      function isConfigHidden(el) {
+        if (!el) return true;
+        return el.classList.contains("cfg-hidden") || el.classList.contains("cfg-pair-hidden");
+      }
+
+      function applyDashboardConfig() {
+        const modules = getDashboardModulesConfig();
+        const els = {
+          broadband: document.getElementById("broadbandSection"),
+          lowScore: document.getElementById("lowScoreSection"),
+          gdjs95: document.getElementById("gdjs95Section"),
+          workNumbers: document.getElementById("workNumbersSection"),
+          satisfaction: document.getElementById("satisfactionSection"),
+          customers: document.getElementById("customersSection"),
+          business: document.getElementById("businessSection"),
+          stat2Table: document.getElementById("improvementSection"),
+          qualityTrend: document.getElementById("qualityTrendSection"),
+          qualityScorePie: document.getElementById("qualityScorePieSection"),
+        };
+
+        Object.keys(els).forEach(function (k) {
+          const el = els[k];
+          if (!el) return;
+          el.classList.remove("cfg-hidden", "cfg-pair-hidden", "cfg-full");
+          const cfg = modules[k] || {};
+          const visible = cfg.visible !== false;
+          el.classList.toggle("cfg-hidden", !visible);
+          const defaultWidth = k === "broadband" ? 100 : 50;
+          const width = normalizeWidth(cfg.width, defaultWidth);
+          el.classList.toggle("cfg-full", width === 100);
+        });
+
+        const pairs = [
+          ["lowScore", "gdjs95"],
+          ["workNumbers", "satisfaction"],
+          ["customers", "business"],
+          ["qualityTrend", "qualityScorePie"],
+        ];
+
+        pairs.forEach(function (pair) {
+          const aKey = pair[0];
+          const bKey = pair[1];
+          const aEl = els[aKey];
+          const bEl = els[bKey];
+          if (!aEl || !bEl) return;
+
+          const aVisible = !aEl.classList.contains("cfg-hidden");
+          const bVisible = !bEl.classList.contains("cfg-hidden");
+          const aFull = aEl.classList.contains("cfg-full");
+          const bFull = bEl.classList.contains("cfg-full");
+
+          if (aVisible && aFull && bVisible) {
+            bEl.classList.add("cfg-pair-hidden");
+          } else if (bVisible && bFull && aVisible) {
+            aEl.classList.add("cfg-pair-hidden");
+          }
+        });
+      }
+
+          function getEmptyRowHtml(colCount, text) {
+        const safeCol =
+          Number.isFinite(colCount) && colCount > 0 ? colCount : 1;
+        const message = text || "暂无数据";
+        return `<tr class="table-empty-row"><td colspan="${safeCol}"><div class="table-empty">${message}</div></td></tr>`;
+      }
+
+      function renderTbodyEmpty(tbody, colCount, text) {
+        if (!tbody) return;
+        tbody.innerHTML = getEmptyRowHtml(colCount, text);
+      }
+      // 省级数据
+      const workNumberProvinceData = [];
+      // 区县级数据（模拟）
+      const workNumberDistrictData = {};
+      // 明细数据（工作号详情）
+      const workNumberDetailData = {};
+      // 工单及时率低于95省级数据
+      let gdjsv95ProvinceData = [];
+      // 工单及时率低于95市级数据
+      let gdjsv95DistrictData = {};
+      // 工单及时率低于95县级数据
+      let gdjsv95DetailData = {};
+      // 商机识别情况统计
+      let data3 = [];
+
+      //  Array(10).fill(null).map((_, i) => ({
+      //     "地市": ["全省", "贵阳", "安顺", "遵义", "黔南", "黔东南", "铜仁", "毕节", "六盘水", "黔西南"][i],
+      //     "商机识别数": 0, "业务办理工单数": 0, "办理成功数": 0, "安装成功数": 0, "办理成功率": 0, "安装及时率": 0
+      // }));
+
+      //低满意度用户情况统计
+      let data4 = [];
+
+      //客户离网倾向情况统计
+      let data5 = [];
+
+      // 装维服务质量环比改善情况（月粒度）
+      let stat2Province = [];
+      let stat2City = {};
+      let stat2Detail = {};
+      let stat2Level = "province";
+      let stat2CityName = "";
+      let stat2DistrictName = "";
+      let stat2TrendRegionDatas = [];
+      let stat2TrendChart = null;
+      let stat2TrendDocClickBound = false;
+
+      // ==========================================
+      // 宽带故障模块状态管理
+      // ==========================================
+
+      let currentLevel2 = "province"; // province, city, district, detail
+      let currentCity2 = "";
+      let currentDistrict2 = "";
+
+      
+
+      //工作号码接入情况start
+      // ==========================================
+      // 工作号码模块状态管理
+      // ==========================================
+      let workNumberState = {
+        level: "province", // province, district, detail
+        currentCity: null,
+        currentDistrict: null,
+        breadcrumb: ["全省"],
+      };
+
+      // 初始化工作号码表格
+      function initWorkNumberTable() {
+        loadWorkNumbersDynamicData();
+      }
+
+      function isMonthGranularity() {
+        const el = document.getElementById("granularitySelect2");
+        return !el || el.value === "month";
+      }
+
+      function formatWorkNumberInteger(val) {
+        const num = Number(val);
+        if (!Number.isFinite(num)) return "-";
+        if (isMonthGranularity()) return Math.round(num).toLocaleString();
+        return num.toLocaleString();
+      }
+
+      let workNumberPopoverMap = {};
+      let workNumberPopoverEl = null;
+      let workNumberPopoverOpenId = null;
+      let workNumberPopoverAnchorEl = null;
+      let workNumberPopoverRowEl = null;
+      let workNumberPopoverBound = false;
+
+      function ensureWorkNumberPopover() {
+        if (workNumberPopoverEl) return workNumberPopoverEl;
+        const el = document.createElement("div");
+        el.id = "workNumberPopover";
+        el.className = "wn-popover hidden";
+        el.innerHTML =
+          '<div class="wn-popover-arrow"></div>' +
+          '<div class="wn-popover-title" id="wnPopoverTitle"></div>' +
+          '<div class="wn-popover-body"><table class="wn-popover-table"><thead><tr>' +
+          "<th>月份</th><th>一次接通率(%)</th><th>真实接通率(%)</th><th>及时率(%)</th><th>得分</th>" +
+          "</tr></thead><tbody id=\"wnPopoverTbody\"></tbody></table></div>";
+        document.body.appendChild(el);
+        workNumberPopoverEl = el;
+        return el;
+      }
+
+      function format2(val) {
+        const num = Number(val);
+        if (!Number.isFinite(num)) return "-";
+        return num.toFixed(2);
+      }
+
+      function renderWorkNumberPopover(detail) {
+        const titleEl = document.getElementById("wnPopoverTitle");
+        const tbodyEl = document.getElementById("wnPopoverTbody");
+        if (!titleEl || !tbodyEl) return;
+        const worker = detail && detail.workerInfo ? detail.workerInfo : {};
+        const workNumber = worker.workNumber || "";
+        const name = worker.name || "";
+        titleEl.textContent = (workNumber ? "工作号：" + workNumber : "工作号") + (name ? "　姓名：" + name : "");
+        const list = detail && Array.isArray(detail.performanceList) ? detail.performanceList : [];
+        if (!list.length) {
+          tbodyEl.innerHTML = '<tr><td colspan="5" class="wn-popover-empty">暂无数据</td></tr>';
+          return;
+        }
+        tbodyEl.innerHTML = list
+          .map(function (it) {
+            return (
+              "<tr>" +
+              "<td>" + (it.month || "-") + "</td>" +
+              "<td>" + format2(it.onceConnectionRate) + "</td>" +
+              "<td>" + format2(it.realConnectionRate) + "</td>" +
+              "<td>" + format2(it.timelyRate) + "</td>" +
+              "<td>" + format2(it.score) + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+      }
+
+      function positionWorkNumberPopover() {
+        const el = workNumberPopoverEl;
+        const anchor = workNumberPopoverAnchorEl;
+        if (!el || !anchor) return;
+        const rect = anchor.getBoundingClientRect();
+        const gap = 10;
+        el.style.left = "0px";
+        el.style.top = "0px";
+        el.classList.remove("wn-popover-pos-top", "wn-popover-pos-bottom");
+        const w = el.offsetWidth || 360;
+        const h = el.offsetHeight || 240;
+        const vw = window.innerWidth || 0;
+        const vh = window.innerHeight || 0;
+        let left = rect.left + rect.width / 2 - w / 2 + 56;
+        left = Math.max(8, Math.min(left, vw - w - 8));
+        let top = rect.top - h - gap;
+        let pos = "top";
+        if (top < 8) {
+          top = rect.bottom + gap;
+          pos = "bottom";
+        }
+        top = Math.max(8, Math.min(top, vh - h - 8));
+        el.style.left = left + "px";
+        el.style.top = top + "px";
+        el.classList.add(pos === "top" ? "wn-popover-pos-top" : "wn-popover-pos-bottom");
+        const arrow = el.querySelector(".wn-popover-arrow");
+        if (arrow) {
+          const anchorCenter = rect.left + rect.width / 2;
+          const arrowLeft = Math.max(14, Math.min(anchorCenter - left, w - 14));
+          arrow.style.left = arrowLeft + "px";
+        }
+      }
+
+      function closeWorkNumberPopover() {
+        if (!workNumberPopoverEl) return;
+        workNumberPopoverEl.classList.add("hidden");
+        workNumberPopoverOpenId = null;
+        workNumberPopoverAnchorEl = null;
+        if (workNumberPopoverRowEl) {
+          workNumberPopoverRowEl.classList.remove("wn-row-active");
+          workNumberPopoverRowEl = null;
+        }
+      }
+
+      function openWorkNumberPopoverById(id, anchorEl, rowEl) {
+        const granularityEl = document.getElementById("granularitySelect2");
+        if (granularityEl && granularityEl.value !== "month") return;
+        ensureWorkNumberPopover();
+        if (!workNumberPopoverEl) return;
+        if (!id || !workNumberPopoverMap[id]) {
+          closeWorkNumberPopover();
+          return;
+        }
+        if (workNumberPopoverOpenId === id && !workNumberPopoverEl.classList.contains("hidden")) {
+          closeWorkNumberPopover();
+          return;
+        }
+        workNumberPopoverOpenId = id;
+        workNumberPopoverAnchorEl = anchorEl;
+        if (workNumberPopoverRowEl && workNumberPopoverRowEl !== rowEl) {
+          workNumberPopoverRowEl.classList.remove("wn-row-active");
+        }
+        workNumberPopoverRowEl = rowEl || null;
+        if (workNumberPopoverRowEl) {
+          workNumberPopoverRowEl.classList.add("wn-row-active");
+        }
+        renderWorkNumberPopover(workNumberPopoverMap[id]);
+        workNumberPopoverEl.classList.remove("hidden");
+        positionWorkNumberPopover();
+        requestAnimationFrame(positionWorkNumberPopover);
+      }
+
+      function bindWorkNumberPopoverEvents() {
+        if (workNumberPopoverBound) return;
+        workNumberPopoverBound = true;
+        document.addEventListener("click", function (e) {
+          if (!workNumberPopoverEl || workNumberPopoverEl.classList.contains("hidden")) return;
+          const t = e.target;
+          if (workNumberPopoverEl.contains(t)) return;
+          if (t && t.closest && t.closest(".work-number-trigger")) return;
+          if (t && t.closest && t.closest(".work-number-row")) return;
+          closeWorkNumberPopover();
+        });
+        window.addEventListener("resize", function () {
+          if (!workNumberPopoverEl || workNumberPopoverEl.classList.contains("hidden")) return;
+          positionWorkNumberPopover();
+        });
+        window.addEventListener("scroll", function () {
+          if (!workNumberPopoverEl || workNumberPopoverEl.classList.contains("hidden")) return;
+          positionWorkNumberPopover();
+        }, true);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeWorkNumberPopover();
+        });
+      }
+
+      // 渲染省级视图
+      function renderWorkNumberProvince() {
+        const tbody = document.getElementById("tbody1");
+        const thead = document.getElementById("thead1");
+
+        TableHeaders.renderThead(thead, TableHeaders.workNumbers.province);
+
+        function toNum(val) {
+          var n = Number(val);
+          return Number.isFinite(n) ? n : null;
+        }
+
+        function calcWorkNumberRate(workCount, totalCount) {
+          var work = toNum(workCount);
+          var total = toNum(totalCount);
+          if (work == null || total == null) {
+            return { work: work, total: total, rateText: "-" };
+          }
+          if (total <= 0) {
+            return { work: work, total: total, rateText: work === 0 ? "0.00" : "-" };
+          }
+          if (work > total) work = total;
+          var rate = (work / total) * 100;
+          if (!Number.isFinite(rate)) return { work: work, total: total, rateText: "-" };
+          return { work: work, total: total, rateText: rate.toFixed(2) };
+        }
+
+        if (!workNumberProvinceData || workNumberProvinceData.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          updateWorkNumberUI();
+          return;
+        }
+
+        const fullRow = workNumberProvinceData.find((i) => i.地市 === "全省");
+        const others = workNumberProvinceData.filter((i) => i.地市 !== "全省");
+        const totalCalc = fullRow ? calcWorkNumberRate(fullRow.工作号数量, fullRow.总人数) : null;
+        const totalRowHtml = fullRow
+          ? `
+          <tr class="font-semibold bg-blue-500/10">
+            <td>全省汇总</td>
+            <td>${totalCalc && totalCalc.work != null ? Number(totalCalc.work).toLocaleString() : (fullRow.工作号数量 ?? "-")}</td>
+            <td>${totalCalc && totalCalc.total != null ? Number(totalCalc.total).toLocaleString() : (fullRow.总人数 != null ? Number(fullRow.总人数).toLocaleString() : "-")}</td>
+            <td>${totalCalc ? totalCalc.rateText : "-"}</td>
+            <td>${fullRow.端口量 != null ? Number(fullRow.端口量).toLocaleString() : "-"}</td>
+          </tr>
+        `
+          : "";
+
+        const rowsHtml = others
+          .map(
+            (item) => {
+              const c = calcWorkNumberRate(item.工作号数量, item.总人数);
+              return `
+              <tr class="clickable-row" onclick="drillDown1('${item.地市}')">
+                <td><span class="drill-down">${item.地市}</span></td>
+                <td>${c.work != null ? Number(c.work).toLocaleString() : (item.工作号数量 ?? "-")}</td>
+                <td>${c.total != null ? Number(c.total).toLocaleString() : (item.总人数 != null ? Number(item.总人数).toLocaleString() : "-")}</td>
+                <td>${c.rateText}</td>
+                <td>${formatWorkNumberInteger(item.端口量)}</td>
+              </tr>
+            `;
+            },
+          )
+          .join("");
+        tbody.innerHTML = totalRowHtml + rowsHtml;
+
+        updateWorkNumberUI();
+      }
+
+      // 渲染区县级视图
+      function renderWorkNumberDistrict(city) {
+        const tbody = document.getElementById("tbody1");
+        const thead = document.getElementById("thead1");
+        const data = workNumberDistrictData[city] || [];
+
+        TableHeaders.renderThead(thead, TableHeaders.workNumbers.district);
+
+        function toNum(val) {
+          var n = Number(val);
+          return Number.isFinite(n) ? n : null;
+        }
+
+        function calcWorkNumberRate(workCount, totalCount) {
+          var work = toNum(workCount);
+          var total = toNum(totalCount);
+          if (work == null || total == null) {
+            return { work: work, total: total, rateText: "-" };
+          }
+          if (total <= 0) {
+            return { work: work, total: total, rateText: work === 0 ? "0.00" : "-" };
+          }
+          if (work > total) work = total;
+          var rate = (work / total) * 100;
+          if (!Number.isFinite(rate)) return { work: work, total: total, rateText: "-" };
+          return { work: work, total: total, rateText: rate.toFixed(2) };
+        }
+
+        if (!data || data.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          workNumberState.level = "district";
+          workNumberState.currentCity = city;
+          workNumberState.breadcrumb = ["全省", city];
+          updateWorkNumberUI();
+          return;
+        }
+
+        tbody.innerHTML = data
+          .map(
+            (item) => {
+              const c = calcWorkNumberRate(item.工作号, item.总人数);
+              return `
+                <tr class="clickable-row" onclick="drillDown1Detail('${city}', '${item.区县}')">
+                    <td><span class="drill-down">${item.区县}</span></td>
+                    <td>${c.work != null ? Number(c.work).toLocaleString() : (item.工作号 ?? "-")}</td>
+                    <td>${c.total != null ? Number(c.total).toLocaleString() : (item.总人数 != null ? Number(item.总人数).toLocaleString() : "-")}</td>
+                    <td>${c.rateText}</td>
+                    <td>${formatWorkNumberInteger(item.端口量)}</td>
+                </tr>
+            `;
+            },
+          )
+          .join("");
+
+        workNumberState.level = "district";
+        workNumberState.currentCity = city;
+        workNumberState.breadcrumb = ["全省", city];
+        updateWorkNumberUI();
+      }
+
+      // 渲染明细视图
+      function renderWorkNumberDetail(city, district) {
+        const key = `${city}-${district}`;
+        const data = workNumberDetailData[key] || [];
+        const granularityEl = document.getElementById("granularitySelect2");
+        const canClick = !granularityEl || granularityEl.value === "month";
+
+        const tableContainer = document.getElementById("tableContainer1");
+        const detailView = document.getElementById("detailView1");
+
+        // 隐藏表格，显示明细
+        tableContainer.classList.add("hidden");
+        detailView.classList.remove("hidden");
+
+        // 生成明细内容
+        if (!data || data.length === 0) {
+          detailView.innerHTML = `
+                <div class="detail-header">
+                    <div>
+                        <div class="detail-title">${city} - ${district} 工作号明细</div>
+                    </div>
+                </div>
+                <div class="detail-empty">暂无数据</div>
+            `;
+
+          workNumberState.level = "detail";
+          workNumberState.currentDistrict = district;
+          workNumberState.breadcrumb = ["全省", city, district];
+          updateWorkNumberUI();
+          return;
+        }
+
+        workNumberPopoverMap = {};
+        data.forEach(function (item, idx) {
+          const wid = "wn_" + (item.工作号 || "") + "_" + idx;
+          workNumberPopoverMap[wid] = item.detail || {
+            workerInfo: { workNumber: item.工作号 || "", name: item.姓名 || "" },
+            performanceList: [],
+          };
+        });
+        bindWorkNumberPopoverEvents();
+
+        detailView.innerHTML = `
+                <div class="detail-header">
+                    <div>
+                        <div class="detail-title">${city} - ${district} 工作号明细</div>
+                        <div class="detail-subtitle">共 ${data.length} 个工作号</div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>工作号</th>
+                                <th>号码归属省份</th>
+                                <th>号码归属地市</th>
+                                <th>姓名</th>
+                                <th>区县</th>
+                                <th>维护端口量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data
+                              .map(
+                                (item, idx) => {
+                                  const wid = "wn_" + (item.工作号 || "") + "_" + idx;
+                                  const rowClass = canClick ? "work-number-row wn-clickable" : "work-number-row wn-disabled";
+                                  const rowOnclick = canClick
+                                    ? ` onclick="openWorkNumberPopoverById('${wid}', this.querySelector('.work-number-trigger') || this, this)"`
+                                    : "";
+                                  const triggerOnclick = canClick
+                                    ? ` onclick="event.preventDefault(); event.stopPropagation(); openWorkNumberPopoverById('${wid}', this, this.closest('tr'))"`
+                                    : "";
+                                  return `
+                                <tr class="${rowClass}" data-wnid="${wid}"${rowOnclick}>
+                                    <td><span class="work-number-trigger" role="button" tabindex="0" data-wnid="${wid}"${triggerOnclick}>${item.工作号}</span></td>
+                                    <td>${item.号码归属省份}</td>
+                                    <td>${item.号码归属地市}</td>
+                                    <td>${item.姓名}</td>
+                                    <td>${item.区县}</td>
+                                    <td>${formatWorkNumberInteger(item.维护端口量)}</td>
+                                </tr>
+                            `;
+                                },
+                              )
+                              .join("")}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+        detailView.querySelectorAll(".work-number-trigger").forEach(function (el) {
+          el.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              const id = el.getAttribute("data-wnid");
+              const row = el.closest(".work-number-row");
+              openWorkNumberPopoverById(id, el, row);
+            }
+          });
+        });
+
+        workNumberState.level = "detail";
+        workNumberState.currentDistrict = district;
+        workNumberState.breadcrumb = ["全省", city, district];
+        updateWorkNumberUI();
+      }
+
+      // 更新UI状态
+      function updateWorkNumberUI() {
+        const subtitle = document.getElementById("subtitle1");
+        const breadcrumb = document.getElementById("breadcrumb1");
+        const backBtn = document.getElementById("backBtn1");
+
+        // 更新副标题
+        if (workNumberState.level === "province") {
+          subtitle.textContent = "全省数据汇总";
+        } else if (workNumberState.level === "district") {
+          subtitle.textContent = `${workNumberState.currentCity}数据`;
+        } else {
+          subtitle.textContent = `${workNumberState.currentCity} - ${workNumberState.currentDistrict} 明细`;
+        }
+
+        // 更新面包屑
+        if (workNumberState.level === "province") {
+          breadcrumb.classList.add("hidden");
+        } else {
+          breadcrumb.classList.remove("hidden");
+          breadcrumb.innerHTML = workNumberState.breadcrumb
+            .map((item, index) => {
+              const isLast = index === workNumberState.breadcrumb.length - 1;
+              const className = isLast
+                ? "breadcrumb-item active"
+                : "breadcrumb-item";
+              const onclick = isLast
+                ? ""
+                : `onclick="workNumberBreadcrumbClick(${index})"`;
+              return `<span class="${className}" ${onclick}>${item}</span>${!isLast ? '<span class="breadcrumb-separator">/</span>' : ""}`;
+            })
+            .join("");
+        }
+
+        // 更新返回按钮
+        if (workNumberState.level === "province") {
+          backBtn.classList.add("hidden");
+        } else {
+          backBtn.classList.remove("hidden");
+        }
+      }
+
+      // 下钻到区县
+      function drillDown1(city) {
+        renderWorkNumberDistrict(city);
+      }
+
+      // 下钻到明细
+      function drillDown1Detail(city, district) {
+        renderWorkNumberDetail(city, district);
+      }
+
+      // 返回上级
+      function drillUp1() {
+        if (workNumberState.level === "detail") {
+          // 从明细返回区县
+          const tableContainer = document.getElementById("tableContainer1");
+          const detailView = document.getElementById("detailView1");
+          tableContainer.classList.remove("hidden");
+          detailView.classList.add("hidden");
+          renderWorkNumberDistrict(workNumberState.currentCity);
+        } else if (workNumberState.level === "district") {
+          // 从区县返回省级
+          renderWorkNumberProvince();
+          workNumberState.level = "province";
+          workNumberState.currentCity = null;
+          workNumberState.breadcrumb = ["全省"];
+          updateWorkNumberUI();
+        }
+      }
+
+      // 面包屑点击
+      function workNumberBreadcrumbClick(index) {
+        if (index === 0) {
+          // 点击全省
+          const tableContainer = document.getElementById("tableContainer1");
+          const detailView = document.getElementById("detailView1");
+          tableContainer.classList.remove("hidden");
+          detailView.classList.add("hidden");
+          renderWorkNumberProvince();
+        } else if (index === 1 && workNumberState.level === "detail") {
+          // 点击地市（从明细返回）
+          const tableContainer = document.getElementById("tableContainer1");
+          const detailView = document.getElementById("detailView1");
+          tableContainer.classList.remove("hidden");
+          detailView.classList.add("hidden");
+          renderWorkNumberDistrict(workNumberState.currentCity);
+        }
+      }
+
+      //工作号码接入情况end
+      async function loadWorkNumbersDynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+        try {
+          let data = await Requests.fetchWorkNumbers(modeKey, suffixNoZero);
+          if (!data && suffixNoZero !== suffixWithZero) {
+            data = await Requests.fetchWorkNumbers(modeKey, suffixWithZero);
+          }
+          if (!data) {
+            throw new Error();
+          }
+          const { p: pData, c: cData, d: dData } = data;
+          workNumberProvinceData.length = 0;
+          workNumberProvinceData.push(...pData);
+          for (let k in workNumberDistrictData)
+            delete workNumberDistrictData[k];
+          Object.assign(workNumberDistrictData, cData);
+          for (let k in workNumberDetailData) delete workNumberDetailData[k];
+          Object.assign(workNumberDetailData, dData);
+
+          if (workNumberState.level === "province") {
+            renderWorkNumberProvince();
+          } else if (workNumberState.level === "district") {
+            renderWorkNumberDistrict(workNumberState.currentCity);
+          } else if (workNumberState.level === "detail") {
+            // 明细视图依赖当前 city/district
+            renderWorkNumberDetail(
+              workNumberState.currentCity,
+              workNumberState.currentDistrict,
+            );
+          }
+        } catch (e) {
+          const tbody = document.getElementById("tbody1");
+          if (tbody) {
+            renderTbodyEmpty(tbody, 5, "暂无数据");
+          }
+        }
+      }
+
+      //工单及时率低于95模块start=======================
+      // ==========================================
+      // 在脚本底部添加以下函数（与其他初始化函数放在一起）
+      // ==========================================
+
+      // 服务评价低分情况统计 - 初始化
+      let cgdjsl95Level = "province"; // province, district, detail
+      let cgdjsl95City = "";
+      let cgdjsl95District = "";
+
+      function initGdjsl95Table() {
+        loadGdjsl95DynamicData();
+      }
+
+      // 渲染省级数据
+      function renderGdjs95Province() {
+        cgdjsl95Level = "province";
+        cgdjsl95City = "";
+
+        const thead = document.getElementById("thead34");
+        const tbody = document.getElementById("tbody34");
+
+        TableHeaders.renderThead(thead, TableHeaders.gdjs95.province);
+
+        if (!gdjsv95ProvinceData || gdjsv95ProvinceData.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          updateGdjs95UI();
+          return;
+        }
+
+        const fullRow = gdjsv95ProvinceData.find((i) => i.地市 === "全省");
+        const others = gdjsv95ProvinceData.filter((i) => i.地市 !== "全省");
+        const totalRowHtml = fullRow
+          ? `
+          <tr class="font-semibold bg-blue-500/10">
+            <td>全省汇总</td>
+            <td>${fullRow.总人数 ?? "-"}</td>
+            <td>${fullRow.人数 ?? "-"}</td>
+            <td>${fullRow.占比 != null ? Number(fullRow.占比).toFixed(2) : "-"}</td>
+            <td>${fullRow.工单及时率 != null ? Number(fullRow.工单及时率).toFixed(2) : "-"}</td>
+          </tr>
+        `
+          : "";
+
+        const rowsHtml = others
+          .map(
+            (item) => `
+        <tr class="clickable-row" onclick="drillDownGdjs95('${item.地市}')">
+            <td><span class="drill-down">${item.地市}</span></td>
+            <td>${item.总人数 ?? (fullRow && fullRow.总人数 != null ? fullRow.总人数 : "-")}</td>
+            <td>${item.人数 ?? "-"}</td>
+            <td>${
+              item.占比 != null
+                ? Number(item.占比).toFixed(2)
+                : fullRow && fullRow.总人数
+                ? Number((Number(item.人数) || 0) / Number(fullRow.总人数)).toFixed(2)
+                : "-"
+            }</td>
+            <td>${item.工单及时率 != null ? Number(item.工单及时率).toFixed(2) : "-"}</td>
+        </tr>
+    `,
+          )
+          .join("");
+        tbody.innerHTML = totalRowHtml + rowsHtml;
+
+        updateGdjs95UI();
+      }
+
+      // 渲染区县级数据
+      function renderGdjs95District(city) {
+        cgdjsl95Level = "district";
+        cgdjsl95City = city;
+
+        const thead = document.getElementById("thead34");
+        const tbody = document.getElementById("tbody34");
+        const data = gdjsv95DistrictData[city] || [];
+
+        TableHeaders.renderThead(thead, TableHeaders.gdjs95.district);
+
+        // 填充数据
+        if (data.length > 0) {
+          const rowsHtml = data
+            .map(
+              (item) => `
+            <tr class="clickable-row" onclick="drillDownGdjs95Detail('${city}', '${item.区县}')">
+                <td><span class="drill-down">${item.区县}</span></td>
+                <td>${item.总人数 ?? "-"}</td>
+                <td>${item.人数 ?? "-"}</td>
+                <td>${item.占比 != null ? Number(item.占比).toFixed(2) : "-"}</td>
+                <td>${item.工单及时率 != null ? Number(item.工单及时率).toFixed(2) : "-"}</td>
+            </tr>
+        `,
+            )
+            .join("");
+          tbody.innerHTML = rowsHtml;
+        } else {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+        }
+
+        updateGdjs95UI();
+      }
+
+      // 渲染明细数据（人员级别）
+      function renderGdjs95Detail(city, district) {
+        cgdjsl95Level = "detail";
+        cgdjsl95District = district;
+
+        const detailView = document.getElementById("detailView34");
+        const tableContainer = document.getElementById("tableContainer34");
+        const key = `${city}-${district}`;
+        const data = gdjsv95DetailData[key] || [];
+
+        // 隐藏表格，显示明细视图
+        tableContainer.classList.add("hidden");
+        detailView.classList.remove("hidden");
+
+        // 生成明细内容
+        if (data.length > 0) {
+          detailView.innerHTML = `
+            <div class="detail-header">
+                <div>
+                    <div class="detail-title">${district} - 人员明细</div>
+                    <div class="detail-subtitle">共 ${data.length} 人</div>
+                </div>
+            </div>
+            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>装维账号</th>
+                            <th>网格</th>
+                            <th>已处理量</th>
+                            <th>在途工单量</th>
+                            <th>工单及时率(%)</th>
+                            <th>超时工单量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data
+                          .map(
+                            (item) => `
+                            <tr>
+                                <td>${item.姓名}</td>
+                                <td>${item.装维账号}</td>
+                                <td>${item.网格}</td>
+                                <td>${item.已处理量}</td>
+                                 <td>${item.在途工单量}</td>
+                                <td>${Number(item.工单及时率).toFixed(2)}</td>
+                                <td>${item.超时工单量}</td>
+                            </tr>
+                        `,
+                          )
+                          .join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        } else {
+          detailView.innerHTML = `
+            <div class="detail-header">
+                <div class="detail-title">${district} - 人员明细</div>
+            </div>
+            <div class="detail-empty">暂无数据</div>
+        `;
+        }
+
+        updateGdjs95UI();
+      }
+
+      // 下钻到区县
+      function drillDownGdjs95(city) {
+        renderGdjs95District(city);
+      }
+
+      // 下钻到明细
+      function drillDownGdjs95Detail(city, district) {
+        renderGdjs95Detail(city, district);
+      }
+
+      // 返回上级
+      function drillUpGdjs95() {
+        const detailView = document.getElementById("detailView34");
+        const tableContainer = document.getElementById("tableContainer34");
+
+        if (cgdjsl95Level === "detail") {
+          // 从明细返回区县
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+          renderGdjs95District(cgdjsl95City);
+        } else if (cgdjsl95Level === "district") {
+          // 从区县返回省级
+          renderGdjs95Province();
+        }
+      }
+
+      // 更新UI状态（面包屑、按钮等）
+      function updateGdjs95UI() {
+        const breadcrumb = document.getElementById("breadcrumb34");
+        const backBtn = document.getElementById("backBtn34");
+        const subtitle = document.getElementById("subtitle34");
+        const detailView = document.getElementById("detailView34");
+        const tableContainer = document.getElementById("tableContainer34");
+
+        if (cgdjsl95Level === "province") {
+          // 省级视图
+          breadcrumb.classList.add("hidden");
+          backBtn.classList.add("hidden");
+          subtitle.textContent = "全省数据汇总";
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+        } else if (cgdjsl95Level === "district") {
+          // 区县级视图
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          subtitle.textContent = `${cgdjsl95City}数据详情`;
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+
+          breadcrumb.innerHTML = `
+            <span class="breadcrumb-item" onclick="renderGdjs95Province()">全省</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">${cgdjsl95City}</span>
+        `;
+        } else if (cgdjsl95Level === "detail") {
+          // 明细视图
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          subtitle.textContent = `${cgdjsl95City} - ${cgdjsl95District} 人员明细`;
+
+          breadcrumb.innerHTML = `
+            <span class="breadcrumb-item" onclick="renderGdjs95Province()">全省</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item" onclick="renderGdjs95District('${cgdjsl95City}')">${cgdjsl95City}</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">${cgdjsl95District}</span>
+        `;
+        }
+      }
+      //工单及时率低于95模块end==============================
+
+      // 初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        applyDashboardConfig();
+        initTable2();
+        initTables();
+        initLowScoreTable();
+        initGdjsl95Table();
+        initWorkNumberTable();
+        loadCustomersDynamicData();
+        loadBusinessDynamicData();
+        loadSatisfactionUsersDynamicData();
+        if (window.initQualityScorePieChart) {
+          window.initQualityScorePieChart();
+        }
+        if (window.loadQualityScorePieData) {
+          window.loadQualityScorePieData();
+        }
+        const bindPicker = (input) => {
+          if (!input) return;
+          input.removeAttribute("readonly");
+          input.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            if (input.showPicker) input.showPicker();
+          });
+          input.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (input.showPicker) input.showPicker();
+          });
+          input.addEventListener("selectstart", (e) => {
+            e.preventDefault();
+          });
+          input.addEventListener("focus", () => {
+            try {
+              if (typeof input.setSelectionRange === "function") {
+                input.setSelectionRange(0, 0);
+              }
+            } catch {}
+          });
+        };
+        bindPicker(document.getElementById("dayInput2"));
+        bindPicker(document.getElementById("monthInput2"));
+        updateImprovementSectionVisibility();
+        loadQualityStat2DynamicData();
+        loadStat2LineData();
+      });
+
+      function updateImprovementSectionVisibility() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const section = document.getElementById("improvementSection");
+        const trendSection = document.getElementById("qualityTrendSection");
+        const pieSection = document.getElementById("qualityScorePieSection");
+        if (!section) return;
+        const sectionCfgHidden = isConfigHidden(section);
+        const trendCfgHidden = trendSection ? isConfigHidden(trendSection) : true;
+        const pieCfgHidden = pieSection ? isConfigHidden(pieSection) : true;
+        if (granularity === "month") {
+          if (!sectionCfgHidden) section.classList.remove("hidden");
+          if (trendSection && !trendCfgHidden) trendSection.classList.remove("hidden");
+          if (pieSection && !pieCfgHidden) pieSection.classList.remove("hidden");
+          renderQualityStat2Province();
+          ensureStat2TrendReadyAndDraw();
+          if (window.renderQualityScorePieChart) window.renderQualityScorePieChart();
+        } else {
+          section.classList.add("hidden");
+          if (trendSection) trendSection.classList.add("hidden");
+          if (pieSection) pieSection.classList.add("hidden");
+          disposeStat2TrendChart();
+        }
+      }
+
+      function disposeStat2TrendChart() {
+        var el = document.getElementById("qualityTrendChart");
+        if (!el || !window.echarts) return;
+        var inst = window.echarts.getInstanceByDom(el);
+        if (inst) inst.dispose();
+        stat2TrendChart = null;
+      }
+
+      function setStat2TrendSubtitle(region) {
+        var subtitle = document.getElementById("qualityTrendSubtitle");
+        if (subtitle) subtitle.textContent = region || "";
+      }
+
+      function drawStat2TrendChart(region) {
+        var el = document.getElementById("qualityTrendChart");
+        if (!el) return;
+        if (!stat2TrendRegionDatas || stat2TrendRegionDatas.length === 0) {
+          disposeStat2TrendChart();
+          el.innerHTML = '<div class="detail-empty">暂无图表数据</div>';
+          return;
+        }
+        var item =
+          stat2TrendRegionDatas.find(function (i) { return i.region === region; }) ||
+          stat2TrendRegionDatas.find(function (i) { return i.region === "全省"; }) ||
+          stat2TrendRegionDatas[0];
+        if (!item) return;
+        setStat2TrendSubtitle(item.region);
+        disposeStat2TrendChart();
+        el.innerHTML = "";
+        if (!window.QualityStat2Chart || typeof window.QualityStat2Chart.init !== "function") {
+          el.innerHTML = '<div class="detail-empty">缺少图表初始化函数</div>';
+          return;
+        }
+        try {
+          stat2TrendChart = window.QualityStat2Chart.init("qualityTrendChart", item);
+        } catch (e) {
+          el.innerHTML = '<div class="detail-empty">图表渲染失败</div>';
+        }
+      }
+
+      function renderStat2TrendRegionSelect() {
+        var btn = document.getElementById("qualityTrendSelectBtn");
+        var label = document.getElementById("qualityTrendSelectLabel");
+        var menu = document.getElementById("qualityTrendSelectMenu");
+        var trendSection = document.getElementById("qualityTrendSection");
+        var shouldDraw = !trendSection || !trendSection.classList.contains("hidden");
+        if (!btn || !label || !menu) return;
+        var regions = stat2TrendRegionDatas.map(function (i) { return i.region; }).filter(Boolean);
+        if (regions.length === 0) {
+          menu.innerHTML = "";
+          label.textContent = "全省";
+          setStat2TrendSubtitle("全省");
+          if (shouldDraw) drawStat2TrendChart("全省");
+          return;
+        }
+        menu.innerHTML = regions
+          .map(function (r) {
+            return (
+              '<div class="stat2-select-item" data-val="' +
+              r +
+              '">' +
+              '<span style="width:8px;height:8px;border-radius:50%;background:#38bdf8;display:inline-block;"></span>' +
+              r +
+              "</div>"
+            );
+          })
+          .join("");
+        var current = regions.indexOf("全省") >= 0 ? "全省" : (regions[0] || "全省");
+        label.textContent = current;
+        menu.classList.add("hidden");
+        btn.onclick = function () {
+          menu.classList.toggle("hidden");
+        };
+        Array.prototype.slice.call(menu.querySelectorAll(".stat2-select-item")).forEach(function (el) {
+          el.onclick = function () {
+            var val = el.getAttribute("data-val");
+            label.textContent = val;
+            menu.classList.add("hidden");
+            drawStat2TrendChart(val);
+          };
+        });
+        if (!stat2TrendDocClickBound) {
+          stat2TrendDocClickBound = true;
+          document.addEventListener("click", function (e) {
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+              menu.classList.add("hidden");
+            }
+          });
+        }
+        if (shouldDraw) drawStat2TrendChart(current);
+      }
+
+      function ensureStat2TrendReadyAndDraw() {
+        var trendSection = document.getElementById("qualityTrendSection");
+        if (trendSection && trendSection.classList.contains("hidden")) return;
+        if (!stat2TrendRegionDatas || stat2TrendRegionDatas.length === 0) return;
+        var label = document.getElementById("qualityTrendSelectLabel");
+        var region = label && label.textContent ? label.textContent : "全省";
+        renderStat2TrendRegionSelect();
+        drawStat2TrendChart(region);
+      }
+
+      function loadStat2LineData() {
+        var el = document.getElementById("qualityTrendChart");
+        if (el) {
+          el.innerHTML = '<div class="detail-empty">数据加载中...</div>';
+        }
+
+        function monthNameToNum(name) {
+          var s = String(name || "").trim();
+          var m = s.match(/(\d{1,2})\s*月/);
+          if (m) {
+            var n = parseInt(m[1], 10);
+            return Number.isFinite(n) ? n : null;
+          }
+          var map = {
+            一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10,
+            十一: 11, 十二: 12,
+          };
+          if (map[s] != null) return map[s];
+          if (s.endsWith("月")) {
+            var t = s.slice(0, -1);
+            if (map[t] != null) return map[t];
+          }
+          return null;
+        }
+
+        function normVal(v) {
+          return v == null ? null : v;
+        }
+
+        function normalizeTrendList(list) {
+          return (list || []).map(function (item) {
+            var region = item && item.region ? item.region : "";
+            var months = Array.isArray(item && item.months) ? item.months : [];
+            var byNum = {};
+            months.forEach(function (mm) {
+              var n = monthNameToNum(mm && mm.name);
+              if (!n || n < 1 || n > 12) return;
+              byNum[n] = mm;
+            });
+            var out = [];
+            for (var i = 1; i <= 12; i++) {
+              var src = byNum[i];
+              out.push({
+                name: i + "月",
+                once_answer_rate: src ? normVal(src.once_answer_rate) : null,
+                real_answer_rate: src ? normVal(src.real_answer_rate) : null,
+                low_satisfaction_repair_rate: src ? normVal(src.low_satisfaction_repair_rate) : null,
+                accumulated_work_order: src ? normVal(src.accumulated_work_order) : null,
+              });
+            }
+            return { region: region, months: out };
+          });
+        }
+
+        fetch("data/09_line_echart/trend_region_months.json", { cache: "no-store" })
+          .then(function (r) { return r.json(); })
+          .then(function (list) {
+            stat2TrendRegionDatas = normalizeTrendList(Array.isArray(list) ? list : []);
+            renderStat2TrendRegionSelect();
+            ensureStat2TrendReadyAndDraw();
+          })
+          .catch(function () {
+            stat2TrendRegionDatas = [];
+            if (el) {
+              el.innerHTML = '<div class="detail-empty">数据加载失败（请用本地服务器打开页面）</div>';
+            }
+          });
+      }
+
+      window.addEventListener("resize", function () {
+        if (stat2TrendChart && typeof stat2TrendChart.resize === "function") {
+          stat2TrendChart.resize();
+        }
+      });
+
+      // ==========================================
+      // 宽带故障模块核心函数 (动态加载版)
+      // ==========================================
+
+      // 切换日期/月份输入框
+      function toggleDateInput2() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+
+        if (granularity === "day") {
+          dayInput.classList.remove("hidden");
+          monthInput.classList.add("hidden");
+        } else {
+          dayInput.classList.add("hidden");
+          monthInput.classList.remove("hidden");
+        }
+        refreshAllData2();
+      }
+
+      function refreshAllData2() {
+        loadDynamicData2();
+        loadGdjsl95DynamicData();
+        loadLowScoreDynamicData();
+        loadWorkNumbersDynamicData();
+        loadCustomersDynamicData();
+        loadBusinessDynamicData();
+        loadSatisfactionUsersDynamicData();
+        updateImprovementSectionVisibility();
+        loadQualityStat2DynamicData();
+        if (window.renderQualityScorePieChart) window.renderQualityScorePieChart();
+      }
+
+      // 加载动态数据
+      async function loadDynamicData2() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const spinner = document.getElementById("loadingSpinner2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+        spinner.classList.remove("hidden");
+
+        try {
+          let data = null;
+          data = await Requests.fetchStatistics(modeKey, suffixNoZero);
+          if (!data && suffixNoZero !== suffixWithZero) {
+            data = await Requests.fetchStatistics(modeKey, suffixWithZero);
+          }
+
+          if (!data) {
+            throw new Error(
+              `找不到对应日期的数据文件 (尝试了: ${suffixNoZero} 和 ${suffixWithZero})`,
+            );
+          }
+
+          // --- 数据处理逻辑 (保持原有逻辑) ---
+          const { p: pData, c: cData, d: dData } = data;
+
+          // 更新全局变量
+          provinceData.length = 0;
+          provinceData.push(...pData);
+
+          // 清空并重新填充对象
+          for (let key in districtData) delete districtData[key];
+          Object.assign(districtData, cData);
+
+          for (let key in detailData) delete detailData[key];
+          Object.assign(detailData, dData);
+
+          // 加载完成后重新渲染当前视图
+          if (currentLevel2 === "province") {
+            renderTable2Province();
+          } else if (currentLevel2 === "city") {
+            renderTable2City(currentCity2);
+          } else if (currentLevel2 === "district") {
+            renderTable2District(currentDistrict2);
+          }
+        } catch (err) {
+          console.error("加载数据失败:", err);
+          const tbody = document.getElementById("tbody2");
+          const level =
+            typeof currentLevel2 === "string" ? currentLevel2 : "province";
+          const colCount =
+            (TableHeaders.statistics[level] && TableHeaders.statistics[level].length) || 1;
+          renderTbodyEmpty(
+            tbody,
+            colCount,
+            `暂无数据`,
+          );
+        } finally {
+          spinner.classList.add("hidden");
+          loadGdjsl95DynamicData();
+          loadLowScoreDynamicData();
+          loadWorkNumbersDynamicData();
+          loadCustomersDynamicData();
+          loadBusinessDynamicData();
+          loadSatisfactionUsersDynamicData();
+        }
+      }
+      async function loadGdjsl95DynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+        try {
+          let data = await Requests.fetchGdjs95(modeKey, suffixNoZero);
+          if (!data && suffixNoZero !== suffixWithZero) {
+            data = await Requests.fetchGdjs95(modeKey, suffixWithZero);
+          }
+          if (!data) {
+            throw new Error();
+          }
+          const { p: pData, c: cData, d: dData } = data;
+          gdjsv95ProvinceData = pData;
+          gdjsv95DistrictData = cData;
+          gdjsv95DetailData = dData;
+          if (cgdjsl95Level === "province") {
+            renderGdjs95Province();
+          } else if (cgdjsl95Level === "district") {
+            renderGdjs95District(cgdjsl95City);
+          } else if (cgdjsl95Level === "detail") {
+            renderGdjs95Detail(cgdjsl95City, cgdjsl95District);
+          }
+        } catch (e) {
+          const tbody = document.getElementById("tbody34");
+          if (tbody) {
+            renderTbodyEmpty(tbody, 5, "暂无数据");
+          }
+        }
+      }
+      function initTable2() {
+        // 设置默认日期
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        if (dayInput) dayInput.value = "2026-04-07";
+        if (monthInput) monthInput.value = "2026-03";
+        loadDynamicData2();
+      }
+
+      // 渲染省级视图（地市列表）
+      function renderTable2Province() {
+        currentLevel2 = "province";
+        currentCity2 = "";
+        currentDistrict2 = "";
+
+        updateUIState();
+        renderTableHeader("province");
+
+        const tbody = document.getElementById("tbody2");
+        tbody.innerHTML = "";
+
+        if (!provinceData || provinceData.length === 0) {
+          renderTbodyEmpty(
+            tbody,
+            (TableHeaders.statistics.province && TableHeaders.statistics.province.length) || 1,
+            "暂无数据",
+          );
+          return;
+        }
+
+        // 添加全省汇总行
+        let totalRow = calculateTotal(provinceData);
+
+        //处理计算率start
+        totalRow["一次接听率"] =
+          (totalRow["一次接听量"] / totalRow["呼入总量"]) * 100;
+        const processed = totalRow["累积已处理量"] || 0;
+        const timeout = totalRow["超时工单量"] || 0;
+        const processing = totalRow["累积在途工单量"] || 0;
+        // 或返回字符串（显示用）
+        totalRow["累积工单及时率"] =
+          processed === 0
+            ? 100
+            : (1 - timeout / (processed + processing)) * 100;
+        totalRow["真实接听率"] =
+          ((totalRow["回拨次数"] + totalRow["一次接听量"]) /
+            totalRow["呼入总量"]) *
+          100;
+        //处理计算率end
+
+        tbody.appendChild(createDataRow(totalRow, "province", true));
+
+        // 添加地市数据行
+        provinceData.forEach((item) => {
+          tbody.appendChild(createDataRow(item, "province", false));
+        });
+      }
+
+      // 渲染市级视图（区县列表）
+      function renderTable2City(cityName) {
+        currentLevel2 = "city";
+        currentCity2 = cityName;
+        currentDistrict2 = "";
+
+        updateUIState();
+        renderTableHeader("city");
+
+        const tbody = document.getElementById("tbody2");
+        tbody.innerHTML = "";
+
+        const districts = districtData[cityName] || [];
+
+        if (!districts || districts.length === 0) {
+          renderTbodyEmpty(
+            tbody,
+            (TableHeaders.statistics.city && TableHeaders.statistics.city.length) || 1,
+            "暂无区县数据",
+          );
+          return;
+        }
+
+        // 添加市级汇总行
+        if (districts.length > 0) {
+          let totalRow = calculateTotal(districts);
+          //处理计算率start
+          totalRow["一次接听率"] =
+            (totalRow["一次接听量"] / totalRow["呼入总量"]) * 100;
+          const processed = totalRow["累积已处理量"] || 0;
+          const timeout = totalRow["超时工单量"] || 0;
+          const processing = totalRow["累积在途工单量"] || 0;
+          // 或返回字符串（显示用）
+          totalRow["累积工单及时率"] =
+            processed === 0
+              ? 100
+              : (1 - timeout / (processed + processing)) * 100;
+
+          totalRow["真实接听率"] =
+            ((totalRow["回拨次数"] + totalRow["一次接听量"]) /
+              totalRow["呼入总量"]) *
+            100;
+          //处理计算率end
+
+          totalRow["区县"] = `${cityName}汇总`;
+          tbody.appendChild(createDataRow(totalRow, "city", true));
+        }
+
+        // 添加区县数据行
+        districts.forEach((item) => {
+          tbody.appendChild(createDataRow(item, "city", false));
+        });
+      }
+
+      // 渲染明细视图（装维人员列表）
+      function renderTable2District(districtName) {
+        currentLevel2 = "district";
+        currentDistrict2 = districtName;
+
+        updateUIState();
+        renderTableHeader("district");
+
+        const tbody = document.getElementById("tbody2");
+        tbody.innerHTML = "";
+
+        const key = `${currentCity2}-${districtName}`;
+        const details = detailData[key] || [];
+
+        if (!details || details.length === 0) {
+          renderTbodyEmpty(
+            tbody,
+            (TableHeaders.statistics.district && TableHeaders.statistics.district.length) || 1,
+            "暂无数据",
+          );
+          return;
+        }
+
+        //添加区县汇总行
+        if (details.length > 0) {
+          let totalRow = calculateTotal(details);
+
+          //处理计算率start
+          totalRow["一次接听率"] =
+            (totalRow["一次接听量"] / totalRow["呼入总量"]) * 100;
+          const processed = totalRow["累积已处理量"] || 0;
+          const timeout = totalRow["超时工单量"] || 0;
+          const processing = totalRow["累积在途工单量"] || 0;
+          // 或返回字符串（显示用）
+          totalRow["累积工单及时率"] =
+            processed === 0
+              ? 100
+              : (1 - timeout / (processed + processing)) * 100;
+          totalRow["真实接听率"] =
+            ((totalRow["回拨次数"] + totalRow["一次接听量"]) /
+              totalRow["呼入总量"]) *
+            100;
+          //处理计算率end
+
+          totalRow["姓名"] = `${districtName}汇总`;
+          totalRow["装维账号"] = "-";
+          totalRow["网格"] = "-";
+          tbody.appendChild(createDetailRow(totalRow, true));
+        }
+
+        // 添加明细数据行
+        details.forEach((item) => {
+          tbody.appendChild(createDetailRow(item, false));
+        });
+      }
+
+      // 创建数据行（省市级）
+      function createDataRow(data, level, isTotal) {
+        const tr = document.createElement("tr");
+        tr.className = isTotal
+          ? "font-semibold bg-blue-500/10"
+          : "clickable-row";
+
+        const nameKey = level === "province" ? "地市" : "区县";
+        const name = data[nameKey] || "";
+
+        // 根据级别确定点击事件
+        if (!isTotal) {
+          tr.onclick = () => {
+            if (level === "province") {
+              renderTable2City(name);
+            } else if (level === "city") {
+              renderTable2District(name);
+            }
+          };
+        }
+
+        const keysOrder = [
+          "呼入总量",
+          "一次接听量",
+          "一次接听率",
+          "回拨次数",
+          "真实未接通次数",
+          "真实接听率",
+          "命中数量",
+          "外呼接通次数",
+          "派单量",
+          "累积已处理量",
+          "累积在途工单量",
+          "累积工单及时率",
+          "超时工单量",
+        ];
+
+        const cells = [name, ...keysOrder.map((k) => data[k] ?? 0)];
+
+        cells.forEach((cell, index) => {
+          const td = document.createElement("td");
+          if (index > 0) {
+            const key = keysOrder[index - 1];
+            if (key && key.includes("率")) {
+              td.textContent = Number(cell).toFixed(2);
+            } else {
+              td.textContent = cell;
+            }
+          } else {
+            if (!isTotal) {
+              td.innerHTML = `<span class="drill-down">${cell}</span>`;
+            } else {
+              td.textContent = cell;
+            }
+          }
+          tr.appendChild(td);
+        });
+
+        return tr;
+      }
+
+      // 创建明细行（人员级）
+      function createDetailRow(data, isTotal) {
+        const tr = document.createElement("tr");
+        tr.className = isTotal ? "font-semibold bg-blue-500/10" : "";
+
+        const keysOrder = [
+          "呼入总量",
+          "一次接听量",
+          "一次接听率",
+          "回拨次数",
+          "真实未接通次数",
+          "真实接听率",
+          "命中数量",
+          "外呼接通次数",
+          "派单量",
+          "累积已处理量",
+          "累积在途工单量",
+          "累积工单及时率",
+          "超时工单量",
+        ];
+
+        const cells = [
+          data["姓名"] || "",
+          data["装维账号"] || "",
+          data["网格"] || "",
+          ...keysOrder.map((k) => data[k] ?? 0),
+        ];
+
+        cells.forEach((cell, index) => {
+          const td = document.createElement("td");
+          if (index > 2) {
+            const key = keysOrder[index - 3];
+            if (key && key.includes("率")) {
+              td.textContent = Number(cell).toFixed(2);
+            } else {
+              td.textContent = cell;
+            }
+            td.style.textAlign = "left";
+          } else {
+            td.textContent = cell;
+          }
+          if (index > 2) td.style.textAlign = "left";
+          tr.appendChild(td);
+        });
+
+        return tr;
+      }
+
+      // 渲染表头
+      function renderTableHeader(level) {
+        const thead = document.getElementById("thead2");
+        thead.innerHTML = "";
+        const tr = document.createElement("tr");
+
+        const headers = TableHeaders.statistics[level];
+        headers.forEach((header) => {
+          const th = document.createElement("th");
+          th.textContent = header;
+          if (header.includes("率") || header.includes("量")) {
+            th.style.textAlign = "left";
+          }
+          tr.appendChild(th);
+        });
+
+        thead.appendChild(tr);
+      }
+
+      // 计算汇总
+      function calculateTotal(dataArray) {
+        if (!dataArray || dataArray.length === 0) return {};
+
+        const total = {};
+        const keys = Object.keys(dataArray[0]).filter(
+          (k) =>
+            k !== "地市" &&
+            k !== "区县" &&
+            k !== "姓名" &&
+            k !== "装维账号" &&
+            k !== "网格" &&
+            k !== "号码归属省份" &&
+            k !== "号码归属地市",
+        );
+
+        keys.forEach((key) => {
+          const sum = dataArray.reduce(
+            (acc, item) => acc + (parseFloat(item[key]) || 0),
+            0,
+          );
+          total[key] =
+            key.includes("率") || key.includes("占比")
+              ? sum / dataArray.length
+              : sum;
+        });
+
+        total["地市"] = "全省汇总";
+        total["区县"] = "全市汇总";
+        return total;
+      }
+
+      // 更新UI状态 - 修复版
+      function updateUIState() {
+        const breadcrumb = document.getElementById("breadcrumb2");
+        const backBtn = document.getElementById("backBtn2");
+        const subtitle = document.getElementById("subtitle2");
+
+        // 显示/隐藏面包屑和返回按钮
+        if (currentLevel2 !== "province") {
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+
+          // 构建面包屑HTML
+          let breadcrumbHTML = "";
+
+          // 第一级：全省
+          breadcrumbHTML +=
+            '<span class="breadcrumb-item" onclick="drillUp2(\'root\')">全省</span>';
+
+          if (currentLevel2 === "city") {
+            // 第二级：地市（当前激活）
+            breadcrumbHTML += '<span class="breadcrumb-separator">/</span>';
+            breadcrumbHTML += `<span class="breadcrumb-item active">${currentCity2}</span>`;
+            subtitle.textContent = `${currentCity2}数据汇总`;
+          } else if (currentLevel2 === "district") {
+            // 第二级：地市（可点击返回）
+            breadcrumbHTML += '<span class="breadcrumb-separator">/</span>';
+            breadcrumbHTML += `<span class="breadcrumb-item" onclick="drillUp2('city')">${currentCity2}</span>`;
+            // 第三级：区县（当前激活）
+            breadcrumbHTML += '<span class="breadcrumb-separator">/</span>';
+            breadcrumbHTML += `<span class="breadcrumb-item active">${currentDistrict2}</span>`;
+            subtitle.textContent = `${currentCity2} - ${currentDistrict2}明细数据`;
+          }
+
+          breadcrumb.innerHTML = breadcrumbHTML;
+        } else {
+          // 省级视图：隐藏面包屑和返回按钮
+          breadcrumb.classList.add("hidden");
+          backBtn.classList.add("hidden");
+          subtitle.textContent = "全省数据汇总";
+        }
+      }
+
+      // 上钻函数
+      function drillUp2(target) {
+        if (target === "root") {
+          renderTable2Province();
+        } else if (target === "city") {
+          renderTable2City(currentCity2);
+        } else {
+          // 默认返回上一级
+          if (currentLevel2 === "district") {
+            renderTable2City(currentCity2);
+          } else if (currentLevel2 === "city") {
+            renderTable2Province();
+          }
+        }
+      }
+
+      // ==========================================
+      // 其他模块渲染函数
+      // ==========================================
+
+      function renderTable1() {
+        const tbody = document.getElementById("tbody1");
+        tbody.innerHTML = data1
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item["地市"]}</td>
+                    <td style="text-align: left;">${item["工作号"]}</td>
+                    <td style="text-align: left;">${item["端口量"].toLocaleString()}</td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      function renderTable3() {
+        const tbody = document.getElementById("tbody3");
+        if (!data3 || data3.length === 0) {
+          renderTbodyEmpty(tbody, 7, "暂无数据");
+          return;
+        }
+        tbody.innerHTML = data3
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item["地市"]}</td>
+                    <td style="text-align: left;">${item["商机识别数"]}</td>
+                    <td style="text-align: left;">${item["业务办理工单数"]}</td>
+                    <td style="text-align: left;">${item["办理成功数"]}</td>
+                    <td style="text-align: left;">${Number(item["办理成功率"]).toFixed(2)}</td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      function renderTable4() {
+        const tbody = document.getElementById("tbody4");
+        if (!data4 || data4.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          return;
+        }
+        tbody.innerHTML = data4
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item["地市"]}</td>
+                    <td style="text-align: left;">${item["不满数"]}</td>
+                    <td style="text-align: left;">${item["派单修复数"]}</td>
+                    <td style="text-align: left;">${Number(item["修复成功率"]).toFixed(2)}</td>
+                    <td style="text-align: left;">${item["满意度平均分"]}</td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      async function loadSatisfactionUsersDynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+
+        try {
+          let list = await Requests.fetchSatisfaction(modeKey, suffixNoZero);
+          if (!list && suffixNoZero !== suffixWithZero) {
+            list = await Requests.fetchSatisfaction(modeKey, suffixWithZero);
+          }
+          if (!list) throw new Error();
+          data4.length = 0;
+          data4.push(...list);
+        } catch (e) {
+          data4.length = 0;
+        } finally {
+          renderTable4();
+        }
+      }
+
+      function renderTable5() {
+        const tbody = document.getElementById("tbody5");
+        if (!data5 || data5.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          return;
+        }
+        tbody.innerHTML = data5
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item["地市"]}</td>
+                    <td style="text-align: left;">${item["倾向数"]}</td>
+                    <td style="text-align: left;">${item["派单修复数"]}</td>
+                    <td style="text-align: left;">${Number(item["派单闭环率"]).toFixed(2)}</td>
+                    <td style="text-align: left;">${item["离网数"]}</td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      async function loadBusinessDynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+
+        try {
+          let list = await Requests.fetchBusiness(modeKey, suffixNoZero);
+          if (!list && suffixNoZero !== suffixWithZero) {
+            list = await Requests.fetchBusiness(modeKey, suffixWithZero);
+          }
+          if (!list) throw new Error();
+          data3.length = 0;
+          data3.push(...list);
+        } catch (e) {
+          data3.length = 0;
+        } finally {
+          renderTable3();
+        }
+      }
+
+      async function loadQualityStat2DynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        if (granularity !== "month") {
+          stat2Province.length = 0;
+          stat2City = {};
+          stat2Detail = {};
+          renderQualityStat2Province();
+          return;
+        }
+        stat2Province.length = 0;
+        stat2City = {};
+        stat2Detail = {};
+        renderQualityStat2Province();
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+        try {
+          let data = await Requests.fetchQualityStat2("month", suffixNoZero);
+          if (!data && suffixNoZero !== suffixWithZero) {
+            data = await Requests.fetchQualityStat2("month", suffixWithZero);
+          }
+          if (!data) throw new Error();
+          const { p: pData, c: cData, d: dData } = data;
+          stat2Province.length = 0;
+          stat2Province.push(...pData);
+          stat2City = {};
+          Object.assign(stat2City, cData);
+          stat2Detail = {};
+          Object.assign(stat2Detail, dData);
+        } catch (e) {
+          stat2Province.length = 0;
+          stat2City = {};
+          stat2Detail = {};
+        } finally {
+          renderQualityStat2Province();
+        }
+      }
+
+      function setStat2TableMode(mode) {
+        const table = document.getElementById("tableImprovement");
+        if (!table) return;
+        table.classList.remove("stat2-mode-province", "stat2-mode-district", "stat2-mode-detail");
+        table.classList.add("stat2-mode-" + mode);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function countHanChars(str) {
+        var m = String(str).match(/[\u4e00-\u9fff]/g);
+        return m ? m.length : 0;
+      }
+
+     function buildStat2DetailHeaderHtml(text) {
+    var raw = String(text).trim();
+    
+    // 如果长度小于等于5，直接返回，不需要换行
+    if (raw.length <= 5) {
+        return escapeHtml(raw);
+    }
+
+    var result = "";
+    // 循环步进：每次取5个字符
+    for (var i = 0; i < raw.length; i += 5) {
+        // 截取从 i 开始的5个字符
+        var chunk = raw.slice(i, i + 5);
+        
+        // 如果不是第一段，就在前面加换行符
+        if (i > 0) {
+            result += "<br>";
+        }
+        
+        // 加上这段文字（记得转义防止HTML注入）
+        result += escapeHtml(chunk);
+    }
+
+    return result;
+}
+
+// 辅助函数：转义HTML特殊字符
+function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
+}
+
+      function applyStat2DetailHeaderWrap() {
+        var table = document.getElementById("tableImprovement");
+        var thead = document.getElementById("theadImprovement");
+        if (!table || !thead) return;
+        if (!table.classList.contains("stat2-mode-detail")) return;
+        var ths = thead.querySelectorAll("th");
+        if (!ths || !ths.length) return;
+
+        ths.forEach(function (th, idx) {
+          var text = (th.textContent || "").trim();
+          if (idx <= 2) {
+            th.classList.remove("stat2-wrap");
+            th.textContent = text;
+            return;
+          }
+          if (countHanChars(text) > 5) {
+            th.classList.add("stat2-wrap");
+            th.innerHTML = buildStat2DetailHeaderHtml(text);
+          } else {
+            th.classList.remove("stat2-wrap");
+            th.textContent = text;
+          }
+        });
+      }
+
+      function renderQualityStat2Province() {
+        const thead = document.getElementById("theadImprovement");
+        const tbody = document.getElementById("tbodyImprovement");
+        if (!thead || !tbody) return;
+        setStat2TableMode("province");
+        TableHeaders.renderThead(thead, TableHeaders.stat2.city);
+        if (!stat2Province || stat2Province.length === 0) {
+          renderTbodyEmpty(tbody, 7, "暂无数据");
+          stat2Level = "province";
+          stat2CityName = "";
+          stat2DistrictName = "";
+          updateStat2UI();
+          return;
+        }
+        stat2Level = "province";
+        stat2CityName = "";
+        stat2DistrictName = "";
+        const rowsHtml = stat2Province
+          .map(function (item) {
+            const name = item["地市"] || "";
+            const clickable =
+              name && name !== "全省"
+                ? "<span class=\"drill-down\">" + name + "</span>"
+                : name || "";
+            const onclickAttr =
+              name && name !== "全省"
+                ? " class=\"clickable-row\" onclick=\"drillDownStat2City('" + name + "')\""
+                : "";
+            return (
+              "<tr" + onclickAttr + ">" +
+              "<td>" + clickable + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)环比"]) + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+        tbody.innerHTML = rowsHtml;
+        updateStat2UI();
+      }
+
+      function formatRate(val) {
+        if (val == null || val === "") return "-";
+        var num = Number(val);
+        if (Number.isNaN(num)) return String(val);
+        return num.toFixed(2);
+      }
+
+      function renderQualityStat2District(city) {
+        const thead = document.getElementById("theadImprovement");
+        const tbody = document.getElementById("tbodyImprovement");
+        if (!thead || !tbody) return;
+        setStat2TableMode("district");
+        TableHeaders.renderThead(thead, TableHeaders.stat2.district);
+        const list = stat2City[city] || [];
+        if (list.length === 0) {
+          renderTbodyEmpty(tbody, 7, "暂无数据");
+          stat2Level = "district";
+          stat2CityName = city;
+          updateStat2UI();
+          return;
+        }
+        stat2Level = "district";
+        stat2CityName = city;
+        const rowsHtml = list
+          .map(function (item) {
+            const district = item["区县"] || "";
+            const clickable =
+              district
+                ? "<span class=\"drill-down\">" + district + "</span>"
+                : district;
+            return (
+              "<tr class=\"clickable-row\" onclick=\"drillDownStat2Detail('" + city + "', '" + district + "')\">" +
+              "<td>" + clickable + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)环比"]) + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+        tbody.innerHTML = rowsHtml;
+        updateStat2UI();
+      }
+
+      function renderQualityStat2Detail(city, district) {
+        const thead = document.getElementById("theadImprovement");
+        const tbody = document.getElementById("tbodyImprovement");
+        if (!thead || !tbody) return;
+        setStat2TableMode("detail");
+        TableHeaders.renderThead(thead, TableHeaders.stat2.gridDetail);
+        applyStat2DetailHeaderWrap();
+        const key = city + "-" + district;
+        const list = stat2Detail[key] || [];
+        if (list.length === 0) {
+          renderTbodyEmpty(tbody, 9, "暂无数据");
+          stat2Level = "detail";
+          stat2CityName = city;
+          stat2DistrictName = district;
+          updateStat2UI();
+          return;
+        }
+        stat2Level = "detail";
+        stat2CityName = city;
+        stat2DistrictName = district;
+        const rowsHtml = list
+          .map(function (item) {
+            return (
+              "<tr>" +
+              "<td>" + (item["姓名"] || "") + "</td>" +
+              "<td>" + (item["装维账号"] || "") + "</td>" +
+              "<td>" + (item["网格"] || "") + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["一次接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["真实接听率(%)环比"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)"]) + "</td>" +
+              "<td style=\"text-align: left;\">" + formatRate(item["累积工单及时率(%)环比"]) + "</td>" +
+              "</tr>"
+            );
+          })
+          .join("");
+        tbody.innerHTML = rowsHtml;
+        updateStat2UI();
+      }
+
+      function drillDownStat2City(city) {
+        renderQualityStat2District(city);
+      }
+      function drillDownStat2Detail(city, district) {
+        renderQualityStat2Detail(city, district);
+      }
+      function drillUpStat2() {
+        if (stat2Level === "detail") {
+          renderQualityStat2District(stat2CityName);
+        } else if (stat2Level === "district") {
+          renderQualityStat2Province();
+        }
+      }
+      function updateStat2UI() {
+        const breadcrumb = document.getElementById("breadcrumbStat2");
+        const backBtn = document.getElementById("backBtnStat2");
+        if (!breadcrumb || !backBtn) return;
+        if (stat2Level === "province") {
+          breadcrumb.classList.add("hidden");
+          backBtn.classList.add("hidden");
+          breadcrumb.innerHTML = "";
+        } else if (stat2Level === "district") {
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          breadcrumb.innerHTML =
+            "<span class=\"breadcrumb-item\" onclick=\"renderQualityStat2Province()\">全省</span>" +
+            "<span class=\"breadcrumb-separator\">/</span>" +
+            "<span class=\"breadcrumb-item active\">" + stat2CityName + "</span>";
+        } else if (stat2Level === "detail") {
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          breadcrumb.innerHTML =
+            "<span class=\"breadcrumb-item\" onclick=\"renderQualityStat2Province()\">全省</span>" +
+            "<span class=\"breadcrumb-separator\">/</span>" +
+            "<span class=\"breadcrumb-item\" onclick=\"renderQualityStat2District('" + stat2CityName + "')\">" + stat2CityName + "</span>" +
+            "<span class=\"breadcrumb-separator\">/</span>" +
+            "<span class=\"breadcrumb-item active\">" + stat2DistrictName + "</span>";
+        }
+      }
+
+      async function loadCustomersDynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+
+        try {
+          let list = await Requests.fetchCustomers(modeKey, suffixNoZero);
+          if (!list && suffixNoZero !== suffixWithZero) {
+            list = await Requests.fetchCustomers(modeKey, suffixWithZero);
+          }
+          if (!list) throw new Error();
+          data5.length = 0;
+          data5.push(...list);
+        } catch (e) {
+          data5.length = 0;
+        } finally {
+          renderTable5();
+        }
+      }
+
+      //人员得分情况模块start
+      <!-- 在 <script> 标签内，数据配置区域添加以下数据 -->
+
+      // 真实接听率低于70 - 省级汇总数据
+      const lowScoreProvinceData = [];
+      // 真实接听率低于70  - 区县级数据
+      const lowScoreDistrictData = {};
+      // 真实接听率低于70  - 明细数据（人员级别）
+      const lowScoreDetailData = {};
+      // ==========================================
+      // 在脚本底部添加以下函数（与其他初始化函数放在一起）
+      // ==========================================
+
+      // 服务评价低分情况统计 - 初始化
+      let currentLowScoreLevel = "province"; // province, district, detail
+      let currentLowScoreCity = "";
+      let currentLowScoreDistrict = "";
+
+      function initLowScoreTable() {
+        loadLowScoreDynamicData();
+      }
+
+      // 渲染省级数据
+      function renderLowScoreProvince() {
+        currentLowScoreLevel = "province";
+        currentLowScoreCity = "";
+
+        const thead = document.getElementById("thead33");
+        const tbody = document.getElementById("tbody33");
+
+        TableHeaders.renderThead(thead, TableHeaders.lowScore.province);
+
+        if (!lowScoreProvinceData || lowScoreProvinceData.length === 0) {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+          updateLowScoreUI();
+          return;
+        }
+
+        const fullRow = lowScoreProvinceData.find((i) => i.地市 === "全省");
+        const others = lowScoreProvinceData.filter((i) => i.地市 !== "全省");
+        const totalRowHtml = fullRow
+          ? `
+          <tr class="font-semibold bg-blue-500/10">
+            <td>全省汇总</td>
+            <td>${fullRow.总人数 ?? "-"}</td>
+            <td>${fullRow.人数 ?? "-"}</td>
+            <td>${fullRow.占比 != null ? Number(fullRow.占比).toFixed(2) : "-"}</td>
+            <td>${fullRow.真实接听率 != null ? Number(fullRow.真实接听率).toFixed(2) : "-"}</td>
+          </tr>
+        `
+          : "";
+
+        const rowsHtml = others
+          .map(
+            (item) => `
+        <tr class="clickable-row" onclick="drillDownLowScore('${item.地市}')">
+            <td><span class="drill-down">${item.地市}</span></td>
+            <td>${item.总人数 ?? (fullRow && fullRow.总人数 != null ? fullRow.总人数 : "-")}</td>
+            <td>${item.人数 ?? "-"}</td>
+            <td>${
+              item.占比 != null
+                ? Number(item.占比).toFixed(2)
+                : fullRow && fullRow.总人数
+                ? Number((Number(item.人数) || 0) / Number(fullRow.总人数)).toFixed(2)
+                : "-"
+            }</td>
+            <td>${item.真实接听率 != null ? Number(item.真实接听率).toFixed(2) : "-"}</td>
+        </tr>
+    `,
+          )
+          .join("");
+        tbody.innerHTML = totalRowHtml + rowsHtml;
+
+        updateLowScoreUI();
+      }
+
+      // 渲染区县级数据
+      function renderLowScoreDistrict(city) {
+        currentLowScoreLevel = "district";
+        currentLowScoreCity = city;
+
+        const thead = document.getElementById("thead33");
+        const tbody = document.getElementById("tbody33");
+        const data = lowScoreDistrictData[city] || [];
+
+        TableHeaders.renderThead(thead, TableHeaders.lowScore.district);
+
+        // 填充数据
+        if (data.length > 0) {
+          const rowsHtml = data
+            .map(
+              (item) => `
+            <tr class="clickable-row" onclick="drillDownLowScoreDetail('${city}', '${item.区县}')">
+                <td><span class="drill-down">${item.区县}</span></td>
+                <td>${item.总人数 ?? "-"}</td>
+                <td>${item.人数 ?? "-"}</td>
+                <td>${item.占比 != null ? Number(item.占比).toFixed(2) : "-"}</td>
+                <td>${item.真实接听率 != null ? Number(item.真实接听率).toFixed(2) : "-"}</td>
+            </tr>
+        `,
+            )
+            .join("");
+          tbody.innerHTML = rowsHtml;
+        } else {
+          renderTbodyEmpty(tbody, 5, "暂无数据");
+        }
+
+        updateLowScoreUI();
+      }
+
+      // 渲染明细数据（人员级别）
+      function renderLowScoreDetail(city, district) {
+        currentLowScoreLevel = "detail";
+        currentLowScoreDistrict = district;
+
+        const detailView = document.getElementById("detailView33");
+        const tableContainer = document.getElementById("tableContainer33");
+        const key = `${city}-${district}`;
+        const data = lowScoreDetailData[key] || [];
+
+        // 隐藏表格，显示明细视图
+        tableContainer.classList.add("hidden");
+        detailView.classList.remove("hidden");
+
+        // 生成明细内容
+        if (data.length > 0) {
+          detailView.innerHTML = `
+            <div class="detail-header">
+                <div>
+                    <div class="detail-title">${district} - 人员明细</div>
+                    <div class="detail-subtitle">共 ${data.length} 人</div>
+                </div>
+            </div>
+            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>装维账号</th>
+                            <th>网格</th>
+                            <th>呼入总量</th>
+                            <th>一次接听量</th>
+                            <th>一次接听率(%)</th>
+                            <th>回拨次数</th>
+                            <th>真实接听率(%)</th>
+                            <th>真实未接通次数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data
+                          .map(
+                            (item) => `
+                            <tr>
+                                <td>${item.姓名}</td>
+                                <td>${item.装维账号}</td>
+                                <td>${item.网格}</td>
+                                <td>${item.呼入总量}</td>
+                                 <td>${item.一次接听量}</td>
+                                <td>${Number(item.一次接听率).toFixed(2)}</td>
+                                <td>${item.回拨次数}</td>
+                                <td>${Number(item.真实接听率).toFixed(2)}</td>
+                                <td>${item.真实未接通次数}</td>
+                            </tr>
+                        `,
+                          )
+                          .join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        } else {
+          detailView.innerHTML = `
+            <div class="detail-header">
+                <div class="detail-title">${district} - 人员明细</div>
+            </div>
+            <div class="detail-empty">暂无数据</div>
+        `;
+        }
+
+        updateLowScoreUI();
+      }
+
+      // 下钻到区县
+      function drillDownLowScore(city) {
+        renderLowScoreDistrict(city);
+      }
+
+      // 下钻到明细
+      function drillDownLowScoreDetail(city, district) {
+        renderLowScoreDetail(city, district);
+      }
+
+      // 返回上级
+      function drillUpLowScore() {
+        const detailView = document.getElementById("detailView33");
+        const tableContainer = document.getElementById("tableContainer33");
+
+        if (currentLowScoreLevel === "detail") {
+          // 从明细返回区县
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+          renderLowScoreDistrict(currentLowScoreCity);
+        } else if (currentLowScoreLevel === "district") {
+          // 从区县返回省级
+          renderLowScoreProvince();
+        }
+      }
+
+      // 更新UI状态（面包屑、按钮等）
+      function updateLowScoreUI() {
+        const breadcrumb = document.getElementById("breadcrumb33");
+        const backBtn = document.getElementById("backBtn33");
+        const subtitle = document.getElementById("subtitle33");
+        const detailView = document.getElementById("detailView33");
+        const tableContainer = document.getElementById("tableContainer33");
+
+        if (currentLowScoreLevel === "province") {
+          // 省级视图
+          breadcrumb.classList.add("hidden");
+          backBtn.classList.add("hidden");
+          subtitle.textContent = "全省数据汇总";
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+        } else if (currentLowScoreLevel === "district") {
+          // 区县级视图
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          subtitle.textContent = `${currentLowScoreCity}数据详情`;
+          detailView.classList.add("hidden");
+          tableContainer.classList.remove("hidden");
+
+          breadcrumb.innerHTML = `
+            <span class="breadcrumb-item" onclick="renderLowScoreProvince()">全省</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">${currentLowScoreCity}</span>
+        `;
+        } else if (currentLowScoreLevel === "detail") {
+          // 明细视图
+          breadcrumb.classList.remove("hidden");
+          backBtn.classList.remove("hidden");
+          subtitle.textContent = `${currentLowScoreCity} - ${currentLowScoreDistrict} 人员明细`;
+
+          breadcrumb.innerHTML = `
+            <span class="breadcrumb-item" onclick="renderLowScoreProvince()">全省</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item" onclick="renderLowScoreDistrict('${currentLowScoreCity}')">${currentLowScoreCity}</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">${currentLowScoreDistrict}</span>
+        `;
+        }
+      }
+
+      // 根据分数获取徽章样式
+      function getScoreBadgeClass(score) {
+        if (score >= 260) return "badge-success";
+        if (score >= 240) return "badge-warning";
+        return "badge-danger";
+      }
+
+      // ==========================================
+      // 在页面加载初始化部分添加调用
+      // ==========================================
+
+      // 在原有的初始化代码中找到 initTables 或类似函数，添加：
+      function initTables() {
+        // ... 其他初始化代码 ...
+
+        // 初始化服务评价低分表格
+        initLowScoreTable();
+        initGdjsl95Table();
+        // ... 其他初始化代码 ...
+      }
+
+      //人员得分情况模块end
+      async function loadLowScoreDynamicData() {
+        const granularity = document.getElementById("granularitySelect2").value;
+        const modeKey = granularity === "day" ? "day" : "month";
+        const dayInput = document.getElementById("dayInput2");
+        const monthInput = document.getElementById("monthInput2");
+        const suffixes = Requests.getSuffixes(granularity, dayInput.value, monthInput.value);
+        let suffixNoZero = suffixes.noZero;
+        let suffixWithZero = suffixes.withZero;
+        try {
+          let data = await Requests.fetchLowScore(modeKey, suffixNoZero);
+          if (!data && suffixNoZero !== suffixWithZero) {
+            data = await Requests.fetchLowScore(modeKey, suffixWithZero);
+          }
+          if (!data) {
+            throw new Error();
+          }
+          const { p: pData, c: cData, d: dData } = data;
+          lowScoreProvinceData.length = 0;
+          lowScoreProvinceData.push(...pData);
+          for (let k in lowScoreDistrictData) delete lowScoreDistrictData[k];
+          Object.assign(lowScoreDistrictData, cData);
+          for (let k in lowScoreDetailData) delete lowScoreDetailData[k];
+          Object.assign(lowScoreDetailData, dData);
+          if (currentLowScoreLevel === "province") {
+            renderLowScoreProvince();
+          } else if (currentLowScoreLevel === "district") {
+            renderLowScoreDistrict(currentLowScoreCity);
+          } else if (currentLowScoreLevel === "detail") {
+            
+            renderLowScoreDetail(currentLowScoreCity, currentLowScoreDistrict);
+          }
+        } catch (e) {
+          const tbody = document.getElementById("tbody33");
+          if (tbody) {
+            renderTbodyEmpty(tbody, 5, "暂无数据");
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
