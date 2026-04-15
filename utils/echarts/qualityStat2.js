@@ -155,6 +155,7 @@
     var real = months.map(function (m) { return toFiniteNumber(m && m.real_answer_rate); });
     var lowSatisfaction = months.map(function (m) { return toFiniteNumber(m && m.low_satisfaction_repair_rate); });
     var accWorkOrder = months.map(function (m) { return toFiniteNumber(m && m.accumulated_work_order); });
+    var serviceLevel = months.map(function (m) { return toFiniteNumber(m && m.overall_service_level); });
     
     var seriesList = [
       {
@@ -198,6 +199,16 @@
         symbolSize: 6,
         lineStyle: { width: 3 },
       },
+      {
+        name: "服务水平",
+        type: "line",
+        smooth: true,
+        connectNulls: false,
+        data: serviceLevel,
+        symbol: "circle",
+        symbolSize: 6,
+        lineStyle: { width: 3 },
+      },
     ];
     
     // 初始化时获取所有数据的轴范围
@@ -222,7 +233,7 @@
     
     var chart = window.echarts.init(el);
     var option = {
-      color: ["#3b82f6", "#22c55e", "#f59e0b", "#a855f7"],
+      color: ["#3b82f6", "#22c55e", "#f59e0b", "#a855f7", "#ec4899"],
       tooltip: {
         trigger: "axis",
         valueFormatter: function (value) { return format2(value); },
@@ -233,7 +244,8 @@
           params.forEach(function (p) {
             var name = p && p.seriesName ? p.seriesName : "";
             var v = p && p.value != null ? p.value : null;
-            var suffix = name === "累积工单量" ? "" : "%";
+            // 累积工单量如果只是数值则不加%，但目前看起来它是及时率
+            var suffix = (name === "累积工单量") ? "" : "%";
             lines.push(
               (p.marker || "") + name + "　" + (v == null ? "-" : format2(v) + suffix),
             );
@@ -241,14 +253,21 @@
           return lines.join("<br/>");
         },
       },
-      legend: {
-        top: 0,
-        data: built.series.map(function (s) { return s.name; }),
-        textStyle: { color: "#334155", fontSize: 12 },
-        // 允许图例点击
-        selectedMode: true
-      },
-      grid: { left: 16, right: 16, top: 44, bottom: 16, containLabel: true },
+      legend: [
+        {
+          top: 0,
+          data: ["一次接听率", "真实接听率", "低满意度修复率"],
+          textStyle: { color: "#334155", fontSize: 12 },
+          selectedMode: true
+        },
+        {
+          top: 25,
+          data: ["累积工单及时率", "服务水平"],
+          textStyle: { color: "#334155", fontSize: 12 },
+          selectedMode: true
+        }
+      ],
+      grid: { left: 16, right: 16, top: 75, bottom: 16, containLabel: true },
       xAxis: {
         type: "category",
         data: built.names,

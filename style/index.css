@@ -115,7 +115,7 @@ body {
 }
 .stat2-chart {
   width: 100%;
-  min-height: 360px;
+  min-height: 400px;
   flex: 1;
 }
 /* 趋势图专用选择器样式 */
