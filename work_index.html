@@ -453,6 +453,10 @@
 
           // 鼠标悬浮隐藏区县
           allOption.onmouseenter = () => {
+            // 悬浮时重置临时状态
+            currentSelected.city = null;
+            currentSelected.district = null;
+            
             districtColumn.classList.add("hidden");
             cityColumn.querySelectorAll('.pie-select-item').forEach(el => el.classList.remove('active'));
             allOption.classList.add('active');
@@ -478,8 +482,12 @@
             
             // 鼠标悬浮显示区县
             option.onmouseenter = (e) => {
+              // 关键修复：悬浮时立即记录当前地市，确保点击区县时有正确的父级上下文
+              currentSelected.city = city.name;
+              currentSelected.district = null;
+              
               renderDistricts(city.children);
-              // 悬浮时临时标记高亮，但不改变 currentSelected
+              // 悬浮时临时标记高亮
               cityColumn.querySelectorAll('.pie-select-item').forEach(el => el.classList.remove('active'));
               option.classList.add('active');
             };

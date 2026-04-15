@@ -413,12 +413,12 @@
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">省份</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">地市</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">区县</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">一次接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：50%<br>挑战值：60%</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">一次接听率得分<br><span class="font-normal text-[10px]">(得分占比10%)</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">真实接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">真实接听率得分<br><span class="font-normal text-[10px]">(得分占比50%)</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">及时率40%<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">及时率得分<br><span class="font-normal text-[10px]">(得分占比40%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">一次接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：50%<br>挑战值：60%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">一次接听率得分<br><span class="font-normal text-[10px]">(得分占比10%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">真实接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">真实接听率得分<br><span class="font-normal text-[10px]">(得分占比50%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率40%<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率得分<br><span class="font-normal text-[10px]">(得分占比40%)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">超时工单</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">总分</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">扣罚</th>
