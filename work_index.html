@@ -450,31 +450,48 @@
           const allOption = document.createElement("div");
           allOption.className = `pie-select-item ${!currentSelected.city ? 'active' : ''}`;
           allOption.textContent = "全省";
+
+          // 鼠标悬浮隐藏区县
+          allOption.onmouseenter = () => {
+            districtColumn.classList.add("hidden");
+            cityColumn.querySelectorAll('.pie-select-item').forEach(el => el.classList.remove('active'));
+            allOption.classList.add('active');
+          };
+
           allOption.onclick = (e) => {
             e.stopPropagation();
             currentSelected.city = null;
             currentSelected.district = null;
-            districtColumn.classList.add("hidden");
             updateUI();
             selectMenu.classList.remove("show");
             onChangeCallback(currentSelected);
           };
           cityColumn.appendChild(allOption);
 
+          // 地市选项
           const cities = guizhouData[0].children;
           cities.forEach((city) => {
             const option = document.createElement("div");
             const isActive = currentSelected.city === city.name;
             option.className = `pie-select-item ${isActive ? 'active' : ''}`;
             option.innerHTML = `<span class="flex-1">${city.name}</span><span class="text-slate-400 text-[10px] ml-2">▶</span>`;
+            
+            // 鼠标悬浮显示区县
+            option.onmouseenter = (e) => {
+              renderDistricts(city.children);
+              // 悬浮时临时标记高亮，但不改变 currentSelected
+              cityColumn.querySelectorAll('.pie-select-item').forEach(el => el.classList.remove('active'));
+              option.classList.add('active');
+            };
+
+            // 点击直接选中地市并关闭
             option.onclick = (e) => {
               e.stopPropagation();
               currentSelected.city = city.name;
               currentSelected.district = null;
-              renderCities(); 
-              renderDistricts(city.children);
-              onChangeCallback(currentSelected);
               updateUI();
+              selectMenu.classList.remove("show");
+              onChangeCallback(currentSelected);
             };
             cityColumn.appendChild(option);
           });
