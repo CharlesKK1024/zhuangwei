@@ -30,14 +30,14 @@ const guizhouData = [
       {
         name: "安顺",
         children: [
-          { name: "西秀区" }, { name: "平坝区" }, { name: "普定县" }, 
+          { name: "西秀区" }, { name: "平坝县" }, { name: "普定县" }, 
           { name: "镇宁县" }, { name: "关岭县" }, { name: "紫云县" }
         ]
       },
       {
         name: "毕节",
         children: [
-          { name: "七星关区" }, { name: "大方县" }, { name: "黔西" }, 
+          { name: "七星关区" }, { name: "大方县" }, { name: "黔西市" }, 
           { name: "金沙县" }, { name: "织金县" }, { name: "纳雍县" }, 
           { name: "威宁县" }, { name: "赫章县" }
         ]

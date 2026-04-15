@@ -403,25 +403,25 @@
           <button class="text-white hover:text-gray-200 text-xl font-bold" onclick="this.closest('.fixed').remove()">×</button>
         </div>
         
-        <div class="flex-1 overflow-auto p-4">
-          <div class="border rounded-lg overflow-hidden">
+        <div class="flex-1 overflow-y-auto p-4">
+          <div class="border rounded-lg">
             <table class="min-w-full text-[11px] border-collapse">
               <thead class="bg-gray-100 text-gray-700 font-bold sticky top-0 z-10 shadow-sm">
                 <tr>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">姓名</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">工作号</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">省份</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">地市</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">区县</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">一次接通率(%)</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">一次得分</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">真实接通率(%)</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">真实得分</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">及时率(%)</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">及时率得分</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">超时工单</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">总分</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap">扣罚</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">姓名</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">工作号</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">省份</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">地市</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">区县</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">一次接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：50%<br>挑战值：60%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">一次接听率得分<br><span class="font-normal text-[10px]">(得分占比10%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">真实接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">真实接听率得分<br><span class="font-normal text-[10px]">(得分占比50%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">及时率40%<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight text-red-600 bg-gray-100 sticky top-0 z-10">及时率得分<br><span class="font-normal text-[10px]">(得分占比40%)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">超时工单</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">总分</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">扣罚</th>
                 </tr>
               </thead>
               <tbody class="bg-white">
