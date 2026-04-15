@@ -118,89 +118,165 @@ body {
   min-height: 360px;
   flex: 1;
 }
-.stat2-select {
+/* 趋势图专用选择器样式 */
+.trend-select {
   position: relative;
-  width: 160px; /* 减小宽度 */
-  margin-right: 20px; /* 预留右侧空间给展开面板 */
+  width: 140px;
+  margin-right: 10px;
 }
-.stat2-select-btn {
+.trend-select-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 36px;
-  padding: 0 12px;
+  height: 32px;
+  padding: 0 10px;
   border: 1px solid #cbd5e1;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #fff;
   cursor: pointer;
   font-size: 13px;
   color: #334155;
 }
-.stat2-select-btn:hover {
-  border-color: #60a5fa;
-  background: #eff6ff;
+.trend-select-btn:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
 }
-.stat2-caret {
+.trend-caret {
   width: 0;
   height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #64748b;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #64748b;
 }
-.stat2-select-menu {
+.trend-select-menu {
   position: absolute;
-  left: 0; /* 改为左对齐，方便向右展开 */
-  top: calc(100% + 6px);
+  left: 0;
+  top: calc(100% + 4px);
   z-index: 1000;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   max-height: 400px;
-  overflow: visible; /* 允许子面板溢出显示 */
   display: none;
+  min-width: 140px;
+  overflow-y: auto;
 }
-.stat2-select-menu.show {
-  display: flex !important;
-  flex-direction: row;
-  width: 160px;
+.trend-select-menu.show {
+  display: block !important;
+}
+.trend-select-item {
+  position: relative;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.trend-select-item:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+.trend-select-item.active {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+.trend-select-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 14px;
+  background: #2563eb;
+  border-radius: 0 2px 2px 0;
 }
 
-.stat2-select-column {
-  width: 180px;
+/* 得分饼图专用选择器样式 (级联) */
+.pie-select {
+  position: relative;
+  width: 140px;
+  margin-right: 10px;
+}
+.pie-select-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  color: #334155;
+}
+.pie-select-btn:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
+}
+.pie-caret {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #64748b;
+}
+.pie-select-menu {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  display: none;
+  overflow: visible;
+}
+.pie-select-menu.show {
+  display: flex !important;
+  flex-direction: row;
+}
+.pie-select-column {
+  width: 160px;
   max-height: 400px;
   overflow-y: auto;
   border-right: 1px solid #f1f5f9;
   padding: 4px 0;
 }
-.stat2-select-column:last-child {
+.pie-select-column:last-child {
   border-right: none;
 }
-
-.stat2-select-item {
+.pie-select-item {
   position: relative;
   padding: 10px 12px;
   font-size: 13px;
-  color: #334155;
+  color: #475569;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s;
 }
-.stat2-select-item:hover {
-  background: #eff6ff;
-  color: #1e40af;
+.pie-select-item:hover {
+  background: #f1f5f9;
+  color: #2563eb;
 }
-.stat2-select-item.active {
+.pie-select-item.active {
   background: #eff6ff;
   color: #2563eb;
   font-weight: 600;
 }
-.stat2-select-item.active::before {
+.pie-select-item.active::before {
   content: "";
   position: absolute;
   left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: 3px;
   height: 16px;
   background: #2563eb;
