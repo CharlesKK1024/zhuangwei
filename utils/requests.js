@@ -105,6 +105,8 @@
             "4月5日",
             "4月6日",
             "4月7日",
+            "4月13日",
+            "4月14日",
           ];
           if (targetDates.includes(suffix)) {
             suffix = "3月10日";
@@ -209,10 +211,14 @@
       );
     },
     fetchQualityScorePie: async function () {
-      return await fetchSingle("data/10pie_echart/trend_region_months_pie.json");
+      return await fetchSingle(
+        "data/10pie_echart/trend_region_months_pie.json",
+      );
     },
     fetchQualityScoreDetail: async function (city, district) {
-      const data = await fetchSingle("data/10pie_echart/trend_region_months_pie.json");
+      const data = await fetchSingle(
+        "data/10pie_echart/trend_region_months_pie.json",
+      );
       if (!data || !data.district_detail_data) return null;
       const key = `${city}-${district}`;
       return data.district_detail_data[key] || null;

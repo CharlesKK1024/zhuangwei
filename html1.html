@@ -727,7 +727,7 @@
         }
 
         const fullRow = workNumberProvinceData.find((i) => i.地市 === "全省");
-        const others = workNumberProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(workNumberProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalCalc = fullRow ? calcWorkNumberRate(fullRow.工作号数量, fullRow.总人数) : null;
         const totalRowHtml = fullRow
           ? `
@@ -1096,7 +1096,7 @@
         }
 
         const fullRow = gdjsv95ProvinceData.find((i) => i.地市 === "全省");
-        const others = gdjsv95ProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(gdjsv95ProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalRowHtml = fullRow
           ? `
           <tr class="font-semibold bg-blue-500/10">
@@ -1412,7 +1412,7 @@
         var trendSection = document.getElementById("stat2TrendSection");
         var shouldDraw = !trendSection || !trendSection.classList.contains("hidden");
         if (!btn || !label || !menu) return;
-        var regions = stat2TrendRegionDatas.map(function (i) { return i.region; }).filter(Boolean);
+        var regions = sortGuiZhouRegions(stat2TrendRegionDatas.map(function (i) { return i.region; }).filter(Boolean));
         if (regions.length === 0) {
           menu.innerHTML = "";
           label.textContent = "全省";
@@ -1729,12 +1729,12 @@
         //处理计算率end
 
         tbody.appendChild(createDataRow(totalRow, "province", true));
-
-        // 添加地市数据行
-        provinceData.forEach((item) => {
-          tbody.appendChild(createDataRow(item, "province", false));
-        });
-      }
+  
+          // 添加地市数据行
+          sortGuiZhouRegions(provinceData.filter(i => i.地市 !== "全省"), "地市").forEach((item) => {
+            tbody.appendChild(createDataRow(item, "province", false));
+          });
+        }
 
       // 渲染市级视图（区县列表）
       function renderTable2City(cityName) {
@@ -2089,7 +2089,7 @@
           renderTbodyEmpty(tbody, 7, "暂无数据");
           return;
         }
-        tbody.innerHTML = data3
+        tbody.innerHTML = sortGuiZhouRegions(data3, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2110,7 +2110,7 @@
           renderTbodyEmpty(tbody, 5, "暂无数据");
           return;
         }
-        tbody.innerHTML = data4
+        tbody.innerHTML = sortGuiZhouRegions(data4, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2155,7 +2155,7 @@
           renderTbodyEmpty(tbody, 5, "暂无数据");
           return;
         }
-        tbody.innerHTML = data5
+        tbody.innerHTML = sortGuiZhouRegions(data5, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2333,7 +2333,7 @@ function escapeHtml(str) {
         stat2Level = "province";
         stat2CityName = "";
         stat2DistrictName = "";
-        const rowsHtml = stat2Province
+        const rowsHtml = sortGuiZhouRegions(stat2Province, "地市")
           .map(function (item) {
             const name = item["地市"] || "";
             const clickable =
@@ -2552,7 +2552,7 @@ function escapeHtml(str) {
         }
 
         const fullRow = lowScoreProvinceData.find((i) => i.地市 === "全省");
-        const others = lowScoreProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(lowScoreProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalRowHtml = fullRow
           ? `
           <tr class="font-semibold bg-blue-500/10">

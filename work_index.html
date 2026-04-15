@@ -382,7 +382,7 @@
           
           // 获取趋势图专用的地区列表 (地市级)
           const regions = (typeof stat2TrendRegionDatas !== 'undefined' && stat2TrendRegionDatas.length > 0) 
-            ? stat2TrendRegionDatas.map(function(i) { return i.region; }).filter(Boolean)
+            ? sortGuiZhouRegions(stat2TrendRegionDatas.map(function(i) { return i.region; }).filter(Boolean))
             : ["全省"];
 
           regions.forEach((regionName) => {
@@ -473,7 +473,7 @@
           cityColumn.appendChild(allOption);
 
           // 地市选项
-          const cities = guizhouData[0].children;
+          const cities = sortGuiZhouRegions(guizhouData[0].children, "name");
           cities.forEach((city) => {
             const option = document.createElement("div");
             const isActive = currentSelected.city === city.name;
@@ -965,7 +965,7 @@
         }
 
         const fullRow = workNumberProvinceData.find((i) => i.地市 === "全省");
-        const others = workNumberProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(workNumberProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalCalc = fullRow ? calcWorkNumberRate(fullRow.工作号数量, fullRow.总人数) : null;
         const totalRowHtml = fullRow
           ? `
@@ -1334,7 +1334,7 @@
         }
 
         const fullRow = gdjsv95ProvinceData.find((i) => i.地市 === "全省");
-        const others = gdjsv95ProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(gdjsv95ProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalRowHtml = fullRow
           ? `
           <tr class="font-semibold bg-blue-500/10">
@@ -1901,7 +1901,7 @@
         // 设置默认日期
         const dayInput = document.getElementById("dayInput2");
         const monthInput = document.getElementById("monthInput2");
-        if (dayInput) dayInput.value = "2026-04-07";
+        if (dayInput) dayInput.value = "2026-04-13";
         if (monthInput) monthInput.value = "2026-03";
         loadDynamicData2();
       }
@@ -1948,12 +1948,12 @@
         //处理计算率end
 
         tbody.appendChild(createDataRow(totalRow, "province", true));
-
-        // 添加地市数据行
-        provinceData.forEach((item) => {
-          tbody.appendChild(createDataRow(item, "province", false));
-        });
-      }
+  
+          // 添加地市数据行
+          sortGuiZhouRegions(provinceData.filter(i => i.地市 !== "全省"), "地市").forEach((item) => {
+            tbody.appendChild(createDataRow(item, "province", false));
+          });
+        }
 
       // 渲染市级视图（区县列表）
       function renderTable2City(cityName) {
@@ -2308,7 +2308,7 @@
           renderTbodyEmpty(tbody, 7, "暂无数据");
           return;
         }
-        tbody.innerHTML = data3
+        tbody.innerHTML = sortGuiZhouRegions(data3, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2329,7 +2329,7 @@
           renderTbodyEmpty(tbody, 5, "暂无数据");
           return;
         }
-        tbody.innerHTML = data4
+        tbody.innerHTML = sortGuiZhouRegions(data4, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2374,7 +2374,7 @@
           renderTbodyEmpty(tbody, 5, "暂无数据");
           return;
         }
-        tbody.innerHTML = data5
+        tbody.innerHTML = sortGuiZhouRegions(data5, "地市")
           .map(
             (item) => `
                 <tr>
@@ -2552,7 +2552,7 @@ function escapeHtml(str) {
         stat2Level = "province";
         stat2CityName = "";
         stat2DistrictName = "";
-        const rowsHtml = stat2Province
+        const rowsHtml = sortGuiZhouRegions(stat2Province, "地市")
           .map(function (item) {
             const name = item["地市"] || "";
             const clickable =
@@ -2771,7 +2771,7 @@ function escapeHtml(str) {
         }
 
         const fullRow = lowScoreProvinceData.find((i) => i.地市 === "全省");
-        const others = lowScoreProvinceData.filter((i) => i.地市 !== "全省");
+        const others = sortGuiZhouRegions(lowScoreProvinceData.filter((i) => i.地市 !== "全省"), "地市");
         const totalRowHtml = fullRow
           ? `
           <tr class="font-semibold bg-blue-500/10">

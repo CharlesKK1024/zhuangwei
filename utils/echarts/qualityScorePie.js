@@ -317,8 +317,12 @@
   // 根据得分档位过滤数据
   function filterDataByScoreRange(districtData, scoreRange) {
     const result = [];
+    
+    // 获取排序后的地市列表
+    const sortedCities = sortGuiZhouRegions(Object.keys(districtData));
 
-    for (const [city, districts] of Object.entries(districtData)) {
+    for (const city of sortedCities) {
+      const districts = districtData[city];
       // 如果不是全省级别，则需要过滤地市
       if (currentQualityScorePieLevel !== "province") {
         if (!fuzzyMatch(city, currentQualityScorePieCity)) {
