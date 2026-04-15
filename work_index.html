@@ -19,7 +19,7 @@
     <div class="dashboard-grid dashboard-grid-quality">
       <!-- 服务质量指标变化趋势 -->
       <section id="qualityTrendSection" class="glass-panel rounded-xl p-4 fade-in module-quality-left">
-        <div class="section-header flex justify-between items-center flex-wrap gap-2">
+        <div class="section-header flex justify-start items-center flex-wrap gap-x-8 gap-y-2">
           <div>
             <h2 class="text-base font-semibold text-blue-custom">服务质量指标变化趋势</h2>
             <p class="text-xs text-slate-400 mt-0.5" id="qualityTrendSubtitle">全省</p>
@@ -29,7 +29,7 @@
               <span id="qualityTrendSelectLabel">全省</span>
               <span class="stat2-caret"></span>
             </div>
-            <div id="qualityTrendSelectMenu" class="stat2-select-menu hidden"></div>
+            <div id="qualityTrendSelectMenu" class="stat2-select-menu"></div>
           </div>
         </div>
         <div id="qualityTrendChart" class="stat2-chart"></div>
@@ -37,7 +37,7 @@
 
       <!-- 装维人员得分情况 -->
       <section id="qualityScorePieSection" class="glass-panel rounded-xl p-4 fade-in module-quality-right">
-        <div class="section-header flex justify-between items-center flex-wrap gap-2">
+        <div class="section-header flex justify-start items-center flex-wrap gap-x-8 gap-y-2">
           <div>
             <h2 class="text-base font-semibold text-blue-custom">装维人员得分情况</h2>
             <p class="text-xs text-slate-400 mt-0.5" id="qualityScorePieSubtitle">全省</p>
@@ -47,7 +47,7 @@
               <span id="qualityScorePieSelectLabel">全省</span>
               <span class="stat2-caret"></span>
             </div>
-            <div id="qualityScorePieSelectMenu" class="stat2-select-menu hidden"></div>
+            <div id="qualityScorePieSelectMenu" class="stat2-select-menu"></div>
           </div>
         </div>
         <div id="qualityScorePieChart" class="stat2-chart"></div>
@@ -388,110 +388,117 @@
           district: null
         };
 
-        function renderSelectMenu(data, level, parentName = "") {
-          selectMenu.innerHTML = "";
+        // 创建两个面板容器
+        selectMenu.innerHTML = `
+          <div class="stat2-select-column city-column"></div>
+          <div class="stat2-select-column district-column hidden"></div>
+        `;
+        const cityColumn = selectMenu.querySelector(".city-column");
+        const districtColumn = selectMenu.querySelector(".district-column");
 
-          // 返回上一级按钮
-          if (level !== "city") {
-            const backOption = document.createElement("div");
-            backOption.className = "stat2-select-item text-blue-500 font-medium";
-            backOption.innerHTML = `← 返回上一级`;
-            backOption.onclick = (e) => {
-              e.stopPropagation();
-              if (level === "district") {
-                currentSelected.district = null;
-                updateSelectLabel();
-                renderSelectMenu(guizhouData[0].children, "city");
-                onChangeCallback(currentSelected);
-              }
-            };
-            selectMenu.appendChild(backOption);
-          }
+        function renderCities() {
+          cityColumn.innerHTML = "";
+          
+          // "全省" 选项
+          const allOption = document.createElement("div");
+          allOption.className = `stat2-select-item ${!currentSelected.city ? 'active' : ''}`;
+          allOption.textContent = "全省";
+          allOption.onclick = (e) => {
+            e.stopPropagation();
+            currentSelected.city = null;
+            currentSelected.district = null;
+            districtColumn.classList.add("hidden");
+            updateSelectLabel();
+            selectMenu.classList.remove("show");
+            onChangeCallback(currentSelected);
+            renderCities();
+          };
+          cityColumn.appendChild(allOption);
 
-          // 只有在地市级别才显示"全省"选项，区县级别不显示默认选项
-          if (level === "city") {
-            const allOption = document.createElement("div");
-            allOption.className = "stat2-select-item";
-            allOption.textContent = "全省";
-            allOption.onclick = () => {
-              currentSelected.city = null;
-              currentSelected.district = null;
-              updateSelectLabel();
-              selectMenu.classList.add("hidden");
-              onChangeCallback(currentSelected);
-            };
-            selectMenu.appendChild(allOption);
-          }
-
-          data.forEach((item) => {
+          // 地市选项
+          const cities = guizhouData[0].children;
+          cities.forEach((city) => {
             const option = document.createElement("div");
-            option.className = "stat2-select-item";
-            // 如果有子级，显示右箭头指示可以展开
-            const hasChildren = item.children && item.children.length > 0;
+            const isActive = currentSelected.city === city.name;
+            option.className = `stat2-select-item ${isActive ? 'active' : ''}`;
             option.innerHTML = `
-              <span class="flex-1">${item.name}</span>
-              ${hasChildren ? '<span class="text-slate-400 text-xs ml-2">▶</span>' : ''}
+              <span class="flex-1">${city.name}</span>
+              <span class="text-slate-400 text-xs ml-2">▶</span>
             `;
             option.onclick = (e) => {
               e.stopPropagation();
-              if (level === "province") {
-                currentSelected = { province: item.name, city: null, district: null };
-              } else if (level === "city") {
-                currentSelected.city = item.name;
-                currentSelected.district = null;
-              } else {
-                currentSelected.district = item.name;
-              }
+              currentSelected.city = city.name;
+              currentSelected.district = null;
+              renderCities(); // 刷新地市激活状态
+              renderDistricts(city.children);
+              onChangeCallback(currentSelected);
               updateSelectLabel();
-              if (hasChildren) {
-                renderSelectMenu(item.children, level === "province" ? "city" : "district", item.name);
-              } else {
-                selectMenu.classList.add("hidden");
-              }
+            };
+            cityColumn.appendChild(option);
+          });
+        }
+
+        function renderDistricts(districts) {
+          districtColumn.innerHTML = "";
+          districtColumn.classList.remove("hidden");
+
+          districts.forEach((dist) => {
+            const option = document.createElement("div");
+            const isActive = currentSelected.district === dist.name;
+            option.className = `stat2-select-item ${isActive ? 'active' : ''}`;
+            option.textContent = dist.name;
+            option.onclick = (e) => {
+              e.stopPropagation();
+              currentSelected.district = dist.name;
+              updateSelectLabel();
+              selectMenu.classList.remove("show");
               onChangeCallback(currentSelected);
             };
-            selectMenu.appendChild(option);
+            districtColumn.appendChild(option);
           });
         }
 
         function updateSelectLabel() {
           let label = currentSelected.province;
           if (currentSelected.city) {
-            label += ` - ${currentSelected.city}`;
+            label = currentSelected.city;
           }
           if (currentSelected.district) {
-            label += ` - ${currentSelected.district}`;
+            label = currentSelected.district;
           }
           selectLabel.textContent = label;
-          subtitleEl.textContent = label;
+          if (subtitleEl) subtitleEl.textContent = label;
         }
 
         selectBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          selectMenu.classList.toggle("hidden");
-          if (!selectMenu.classList.contains("hidden")) {
-            // 根据当前选择状态渲染对应的层级
+          const isShowing = selectMenu.classList.contains("show");
+          
+          // 关闭其他可能打开的菜单
+          document.querySelectorAll('.stat2-select-menu').forEach(m => m.classList.remove('show'));
+          
+          if (!isShowing) {
+            selectMenu.classList.add("show");
+            renderCities();
             if (currentSelected.city) {
               const cityData = guizhouData[0].children.find(c => c.name === currentSelected.city);
               if (cityData && cityData.children) {
-                renderSelectMenu(cityData.children, "district", cityData.name);
-              } else {
-                renderSelectMenu(guizhouData[0].children, "city");
+                renderDistricts(cityData.children);
               }
             } else {
-              renderSelectMenu(guizhouData[0].children, "city"); // Start from cities
+              districtColumn.classList.add("hidden");
             }
           }
         });
 
         document.addEventListener("click", (e) => {
-          if (!selectId || !document.getElementById(selectId).contains(e.target)) {
-            selectMenu.classList.add("hidden");
+          if (!selectMenu.contains(e.target) && !selectBtn.contains(e.target)) {
+            selectMenu.classList.remove("show");
           }
         });
 
         updateSelectLabel();
-        onChangeCallback(currentSelected); // Initial call
+        onChangeCallback(currentSelected); // 初始调用一次
       }
 
       // Setup for Quality Trend Section
@@ -506,7 +513,10 @@
           qualityTrendSelectState = selected;
           console.log("Quality Trend Selected:", qualityTrendSelectState);
           // Trigger data refresh for quality trend chart
-          // refreshQualityTrendChart(qualityTrendSelectState);
+          let region = "全省";
+          if (selected.district) region = selected.district;
+          else if (selected.city) region = selected.city;
+          drawStat2TrendChart(region);
         },
       );
 
@@ -1607,54 +1617,12 @@
       }
 
       function renderStat2TrendRegionSelect() {
-        var btn = document.getElementById("qualityTrendSelectBtn");
         var label = document.getElementById("qualityTrendSelectLabel");
-        var menu = document.getElementById("qualityTrendSelectMenu");
         var trendSection = document.getElementById("qualityTrendSection");
         var shouldDraw = !trendSection || !trendSection.classList.contains("hidden");
-        if (!btn || !label || !menu) return;
-        var regions = stat2TrendRegionDatas.map(function (i) { return i.region; }).filter(Boolean);
-        if (regions.length === 0) {
-          menu.innerHTML = "";
-          label.textContent = "全省";
-          setStat2TrendSubtitle("全省");
-          if (shouldDraw) drawStat2TrendChart("全省");
-          return;
-        }
-        menu.innerHTML = regions
-          .map(function (r) {
-            return (
-              '<div class="stat2-select-item" data-val="' +
-              r +
-              '">' +
-              '<span style="width:8px;height:8px;border-radius:50%;background:#38bdf8;display:inline-block;"></span>' +
-              r +
-              "</div>"
-            );
-          })
-          .join("");
-        var current = regions.indexOf("全省") >= 0 ? "全省" : (regions[0] || "全省");
-        label.textContent = current;
-        menu.classList.add("hidden");
-        btn.onclick = function () {
-          menu.classList.toggle("hidden");
-        };
-        Array.prototype.slice.call(menu.querySelectorAll(".stat2-select-item")).forEach(function (el) {
-          el.onclick = function () {
-            var val = el.getAttribute("data-val");
-            label.textContent = val;
-            menu.classList.add("hidden");
-            drawStat2TrendChart(val);
-          };
-        });
-        if (!stat2TrendDocClickBound) {
-          stat2TrendDocClickBound = true;
-          document.addEventListener("click", function (e) {
-            if (!menu.contains(e.target) && !btn.contains(e.target)) {
-              menu.classList.add("hidden");
-            }
-          });
-        }
+        if (!label) return;
+        
+        var current = label.textContent || "全省";
         if (shouldDraw) drawStat2TrendChart(current);
       }
 
