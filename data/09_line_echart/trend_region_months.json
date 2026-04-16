@@ -8,7 +8,7 @@
         "real_answer_rate": 91.5651,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 86.74743,
-        "overall_service_level": 71.828473
+        "overall_service_level": 71.178304
       },
       {
         "name": "二月",
@@ -16,7 +16,7 @@
         "real_answer_rate": 92.49,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 87.89,
-        "overall_service_level": 73.810074
+        "overall_service_level": 73.167905
       },
       {
         "name": "三月",
@@ -66,7 +66,7 @@
         "real_answer_rate": 84.2064703183127,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 97.25,
-        "overall_service_level": 80.166078
+        "overall_service_level": 79.883151
       },
       {
         "name": "二月",
@@ -74,7 +74,7 @@
         "real_answer_rate": 94.68,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 97.45,
-        "overall_service_level": 81.828432
+        "overall_service_level": 81.538801
       },
       {
         "name": "三月",
@@ -240,7 +240,7 @@
         "real_answer_rate": 89.5040895923491,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 42.56,
-        "overall_service_level": 80.485012
+        "overall_service_level": 71.315926
       },
       {
         "name": "二月",
@@ -248,7 +248,7 @@
         "real_answer_rate": 94.15,
         "low_satisfaction_repair_rate": 0,
         "accumulated_work_order": 43.41,
-        "overall_service_level": 82.2403
+        "overall_service_level": 73.216326
       },
       {
         "name": "三月",

@@ -109,11 +109,11 @@
             "4月14日",
           ];
           if (targetDates.includes(suffix)) {
-            suffix = "3月10日";
+            suffix = "3月11日";
           }
         }
         if (modeKey === "month") {
-          const targetDates = ["2月", "3月"];
+          const targetDates = ["1月", "2月", "3月"];
           if (targetDates.includes(suffix)) {
             suffix = "2月";
           }
