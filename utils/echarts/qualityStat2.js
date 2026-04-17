@@ -167,6 +167,7 @@
         symbol: "circle",
         symbolSize: 6,
         lineStyle: { width: 3 },
+        yAxisIndex: 0,
       },
       {
         name: "真实接听率",
@@ -177,6 +178,7 @@
         symbol: "circle",
         symbolSize: 6,
         lineStyle: { width: 3 },
+        yAxisIndex: 0,
       },
       {
         name: "低满意度修复率",
@@ -187,6 +189,7 @@
         symbol: "circle",
         symbolSize: 6,
         lineStyle: { width: 3 },
+        yAxisIndex: 0,
       },
       {
         name: "累积工单及时率",
@@ -194,10 +197,10 @@
         smooth: true,
         connectNulls: false,
         data: accWorkOrder,
-        yAxisIndex: 1,
         symbol: "circle",
         symbolSize: 6,
         lineStyle: { width: 3 },
+        yAxisIndex: 0,
       },
       {
         name: "服务水平",
@@ -205,16 +208,15 @@
         smooth: true,
         connectNulls: false,
         data: serviceLevel,
+        yAxisIndex: 1,
         symbol: "circle",
         symbolSize: 6,
         lineStyle: { width: 3 },
       },
     ];
-    
-    // 初始化时获取所有数据的轴范围
-    var initData = getValidSeriesData(seriesList);
-    var percentAxis = calcPercentAxisBounds(initData.percentData);
-    var workOrderAxis = calcNumberAxisBounds(initData.workOrderData);
+
+    var percentAxis = { min: 0, max: 100 };
+    var workOrderAxis = { min: 0, max: 100 };
     
     return {
       names: names,
@@ -244,8 +246,7 @@
           params.forEach(function (p) {
             var name = p && p.seriesName ? p.seriesName : "";
             var v = p && p.value != null ? p.value : null;
-            // 累积工单量如果只是数值则不加%，但目前看起来它是及时率
-            var suffix = (name === "累积工单量") ? "" : "%";
+            var suffix = (name === "服务水平") ? "分" : "%";
             lines.push(
               (p.marker || "") + name + "　" + (v == null ? "-" : format2(v) + suffix),
             );
@@ -271,31 +272,29 @@
       xAxis: {
         type: "category",
         data: built.names,
-        axisLine: { lineStyle: { color: "rgba(148,163,184,0.7)" } },
+        axisLine: { lineStyle: { color: "#e2e8f0" } },
         axisTick: { show: false },
         axisLabel: { color: "#64748b", fontSize: 12 },
       },
       yAxis: [
         {
           type: "value",
-          min: built.percentAxis.min,
-          max: built.percentAxis.max,
+          max: 100,
           axisLine: { show: false },
           axisTick: { show: false },
           axisLabel: {
             color: "#64748b",
             fontSize: 12,
-            formatter: function (v) { return v + "%"; },
+            formatter: "{value}%",
           },
-          splitLine: { lineStyle: { color: "rgba(148,163,184,0.25)" } },
+          splitLine: { lineStyle: { color: "#f1f5f9" } },
         },
         {
           type: "value",
-          min: built.workOrderAxis.min,
-          max: built.workOrderAxis.max,
+          max: 100,
           axisLine: { show: false },
           axisTick: { show: false },
-          axisLabel: { color: "#64748b", fontSize: 12 },
+          axisLabel: { color: "#64748b", fontSize: 12, formatter: "{value}" },
           splitLine: { show: false },
         },
       ],
