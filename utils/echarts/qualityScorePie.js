@@ -412,10 +412,10 @@
             <table class="min-w-full text-[11px] border-collapse">
               <thead class="bg-gray-100 text-gray-700 font-bold sticky top-0 z-10 shadow-sm">
                 <tr>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">姓名</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">工作号</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">省份</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">地市</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">号码归属省份</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">号码归属地市</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">姓名</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">区县</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">一次接通率<br><span class="font-normal text-[10px] text-gray-500">基准值：50%<br>挑战值：60%</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">一次接听率得分<br><span class="font-normal text-[10px]">(得分占比10%)</span></th>
@@ -424,11 +424,10 @@
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率40%<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率得分<br><span class="font-normal text-[10px]">(得分占比40%)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">超时工单</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">总分</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">超时工单扣罚情况<br><span class="font-normal text-[10px] text-gray-500">(90分以上5元一单<br>70-90分之间10元一单<br>70分以下20元一单)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">综合得分扣罚情况<br><span class="font-normal text-[10px] text-gray-500">(低于70分一人扣罚50元)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">综合扣罚<br><span class="font-normal text-[10px] text-gray-500">(超时工单扣罚+<br>综合得分扣罚)</span></th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">总分</th>
-                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">扣罚</th>
                 </tr>
               </thead>
               <tbody class="bg-white">
@@ -436,23 +435,22 @@
                   .map(
                     (person) => `
                   <tr class="border-b hover:bg-blue-50/50 text-gray-600 transition-colors">
-                    <td class="px-2 py-1.5 whitespace-nowrap">${person.姓名 || "-"}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${person.工作号 || "-"}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${person.号码归属省份 || "-"}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${person.号码归属地市 || "-"}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap">${person.姓名 || "-"}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${person.区县 || "-"}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${(person.once_answer_rate || person.一次接通率 || 0).toFixed(2)}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap">${(person.一次接听率得分 || 0).toFixed(2)}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap">${(person["一次接听率得分（得分占比10%）"] || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${(person.real_answer_rate || person.真实接通率 || 0).toFixed(2)}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap">${(person.真实接听率得分 || 0).toFixed(2)}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap">${(person["真实接听率得分（得分占比50%）"] || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${(person["及时率40%"] || 0).toFixed(2)}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap">${(person.及时率得分 || 0).toFixed(2)}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap ">${person.超时工单量 || 0}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap">${(person["及时率得分（得分占比40%）"] || 0).toFixed(2)}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap ">${person.超时工单 || 0}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap ">${(person.总分 || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["超时工单扣罚情况（90分以上5元一单 70-90分之间10元一单 70分以下20元一单）"] || 0}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["综合得分扣罚情况（低于70分一人扣罚50元）"] || 0}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["综合扣罚（超时工单扣罚+综合得分扣罚）"] || 0}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap ">${(person.总分 || 0).toFixed(2)}</td>
-                    <td class="px-2 py-1.5 whitespace-nowrap">${person.扣罚情况 || "0"}</td>
                   </tr>
                 `,
                   )
