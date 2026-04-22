@@ -54,7 +54,7 @@
   function getNoDataOption() {
     return {
       title: {
-        text: "装维人员得分情况",
+        text: "装维人员服务评定",
         left: "center",
         top: "10",
       },
@@ -78,6 +78,7 @@
 
   function getQualityScorePieOption() {
     // console.log("getQualityScorePieOption called.");
+    let v100 = 0;
     let v90 = 0;
     let v70_90 = 0;
     let v70 = 0;
@@ -109,11 +110,15 @@
       // console.log("No month input, defaulting to last month:", monthData);
     }
 
-    // --- 关键修改：如果没有找到对应月份的数据，直接返回“暂无数据” ---
+    // --- 关键修改：如果没有找到对应月份的数据，直接返回"暂无数据" ---
     if (!monthData) {
-      // console.log("No monthData found for selected criteria, returning no data option.");
+      console.log("No monthData found for selected criteria, returning no data option.");
+      console.log("monthInput value:", monthInput?.value);
+      console.log("qualityScorePieData months:", qualityScorePieData?.map(item => item.month || item.name));
       return getNoDataOption();
     }
+
+    console.log("Selected monthData:", monthData);
 
     let currentItem = null;
     if (currentQualityScorePieLevel === "province") {
@@ -137,21 +142,29 @@
     }
 
     if (currentItem) {
-      v90 = currentItem["90分以上人数"] || 0;
+      //增加100分人数占比
+      v100 = currentItem["100分人数"] || 0;
+      //增加90-100分人数占比
+      v90 = currentItem["90-100分人数"] || 0;
       v70_90 = currentItem["70-90分人数"] || 0;
       v70 = currentItem["小于70分人数"] || 0;
+      console.log("currentItem found:", currentItem);
+    } else {
+      console.log("currentItem is undefined for level:", currentQualityScorePieLevel, "city:", currentQualityScorePieCity, "district:", currentQualityScorePieDistrict);
+      console.log("Available province_data:", monthData?.province_data?.map(d => d["地市"]));
     }
 
     // 关键修改：必须使用 clear 方法清除旧的图形，防止 graphic 残留，同时也要在数据有效时清除 graphic
-    if (v90 === 0 && v70_90 === 0 && v70 === 0) {
+    if (v100 === 0 && v90 === 0 && v70_90 === 0 && v70 === 0) {
+      console.log("All values are 0, returning no data option");
       return getNoDataOption();
     }
 
-    console.log("Returning chart option with data:", { v90, v70_90, v70 });
+    console.log("Returning chart option with data:", { v100, v90, v70_90, v70 });
 
     return {
       title: {
-        text: "装维人员得分情况",
+        text: "装维人员服务评定",
         left: "center",
         top: "10",
       },
@@ -163,9 +176,9 @@
         orient: "vertical",
         left: "left",
         top: "40",
-        data: ["90分以上占比", "70-90分占比", "70分以下占比"],
+        data: ["100分占比", "[90, 100)分占比", "[70, 90)分占比", "[0, 70)分占比"],
       },
-      color: ["#4f46e5", "#86efac", "#fbbf24"],
+      color: ["#05d2ff", "#6366f1", "#86efac", "#fbbf24"],
       series: [
         {
           name: "得分情况",
@@ -173,9 +186,10 @@
           radius: "50%",
           center: ["50%", "55%"],
           data: [
-            { value: v90, name: "90分以上占比" },
-            { value: v70_90, name: "70-90分占比" },
-            { value: v70, name: "70分以下占比" },
+            { value: v100, name: "100分占比" },
+            { value: v90, name: "[90, 100)分占比" },
+            { value: v70_90, name: "[70, 90)分占比" },
+            { value: v70, name: "[0, 70)分占比" },
           ],
           label: {
             show: true,
@@ -260,11 +274,13 @@
 
     // 根据点击的段确定得分档位
     let scoreRange = "";
-    if (clickedSegment === "90分以上占比") {
-      scoreRange = "90以上";
-    } else if (clickedSegment === "70-90分占比") {
+    if (clickedSegment === "100分占比") {
+      scoreRange = "100";
+    } else if (clickedSegment === "[90, 100)分占比") {
+      scoreRange = "90-100";
+    } else if (clickedSegment === "[70, 90)分占比") {
       scoreRange = "70-90";
-    } else if (clickedSegment === "70分以下占比") {
+    } else if (clickedSegment === "[0, 70)分占比") {
       scoreRange = "小于70";
     }
 
@@ -338,9 +354,28 @@
           }
         }
 
-        const filteredPeople = people.filter(
-          (person) => person.得分档位 === scoreRange,
-        );
+        const filteredPeople = people.filter((person) => {
+          if (scoreRange === "100") {
+            return person.得分档位 === "100" || person.总分 === 100;
+          } else if (scoreRange === "90-100") {
+            return (
+              person.得分档位 === "90-100" ||
+              (person.总分 >= 90 && person.总分 < 100)
+            );
+          } else if (scoreRange === "70-90") {
+            return (
+              person.得分档位 === "70-90" ||
+              (person.总分 >= 70 && person.总分 < 90)
+            );
+          } else if (scoreRange === "小于70") {
+            return (
+              person.得分档位 === "小于70" ||
+              person.得分档位 === "70以下" ||
+              person.总分 < 70
+            );
+          }
+          return person.得分档位 === scoreRange;
+        });
         if (filteredPeople.length > 0) {
           result.push({
             city: city,
@@ -424,10 +459,12 @@
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率40%<br><span class="font-normal text-[10px] text-gray-500">基准值：90%<br>挑战值：95%</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight ">及时率得分<br><span class="font-normal text-[10px]">(得分占比40%)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">超时工单</th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">4小时内闭环量</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap bg-gray-100 sticky top-0 z-10">总分</th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">超时工单扣罚情况<br><span class="font-normal text-[10px] text-gray-500">(90分以上5元一单<br>70-90分之间10元一单<br>70分以下20元一单)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">综合得分扣罚情况<br><span class="font-normal text-[10px] text-gray-500">(低于70分一人扣罚50元)</span></th>
                   <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">综合扣罚<br><span class="font-normal text-[10px] text-gray-500">(超时工单扣罚+<br>综合得分扣罚)</span></th>
+                  <th class="px-2 py-2 text-left border-b whitespace-nowrap leading-tight bg-gray-100 sticky top-0 z-10">激励情况(人均)<br><span class="font-normal text-[10px] text-gray-500">针对有命中且满分人员</span></th>
                 </tr>
               </thead>
               <tbody class="bg-white">
@@ -447,10 +484,12 @@
                     <td class="px-2 py-1.5 whitespace-nowrap">${(person["及时率40%"] || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap">${(person["及时率得分（得分占比40%）"] || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person.超时工单 || 0}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap ">${person["4小时内闭环量"] || 0}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${(person.总分 || 0).toFixed(2)}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["超时工单扣罚情况（90分以上5元一单 70-90分之间10元一单 70分以下20元一单）"] || 0}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["综合得分扣罚情况（低于70分一人扣罚50元）"] || 0}</td>
                     <td class="px-2 py-1.5 whitespace-nowrap ">${person["综合扣罚（超时工单扣罚+综合得分扣罚）"] || 0}</td>
+                    <td class="px-2 py-1.5 whitespace-nowrap ">${(person["奖励金额"] || 0).toFixed(2)}</td>
                   </tr>
                 `,
                   )

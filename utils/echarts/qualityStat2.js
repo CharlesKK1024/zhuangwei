@@ -203,7 +203,7 @@
         yAxisIndex: 0,
       },
       {
-        name: "服务水平",
+        name: "服务综合评价",
         type: "line",
         smooth: true,
         connectNulls: false,
@@ -246,7 +246,7 @@
           params.forEach(function (p) {
             var name = p && p.seriesName ? p.seriesName : "";
             var v = p && p.value != null ? p.value : null;
-            var suffix = (name === "服务水平") ? "分" : "%";
+            var suffix = (name === "服务综合评价") ? "分" : "%";
             lines.push(
               (p.marker || "") + name + "　" + (v == null ? "-" : format2(v) + suffix),
             );
@@ -263,7 +263,7 @@
         },
         {
           top: 25,
-          data: ["累积工单及时率", "服务水平"],
+          data: ["累积工单及时率", "服务综合评价"],
           textStyle: { color: "#334155", fontSize: 12 },
           selectedMode: true
         }

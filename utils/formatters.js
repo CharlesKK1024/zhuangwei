@@ -12,7 +12,7 @@ function sanitizeCellValue(value) {
  */
 function sortGuiZhouRegions(data, regionKey) {
   if (!Array.isArray(data)) return [];
-  const order = ["全省", "贵阳", "安顺", "遵义", "黔南", "黔东南", "铜仁", "毕节", "六盘水", "黔西南"];
+  const order = ["全省", "贵阳", "遵义", "安顺", "黔南", "黔东南", "铜仁", "毕节", "六盘水", "黔西南"];
   
   return data.sort((a, b) => {
     // 支持对象数组和字符串数组
