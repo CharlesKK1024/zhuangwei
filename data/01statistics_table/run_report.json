@@ -1,6 +1,6 @@
 {
   "script": "generate_json.py",
-  "generated_at": "2026-04-23T14:32:35",
+  "generated_at": "2026-05-07T20:43:14",
   "input_dir": "C:\\program1\\zej\\贵州\\data",
   "output_dir": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计",
   "file_pattern": "*工作号质检数据不含公式*.xlsx",
@@ -30,6 +30,141 @@
       "granularity": "day",
       "row_count": 1660,
       "clean_row_count": 1660,
+      "warnings": []
+    },
+    {
+      "file": "4月22日.xlsx",
+      "date_code": "0422",
+      "date": "4月22日",
+      "granularity": "day",
+      "row_count": 1414,
+      "clean_row_count": 1414,
+      "warnings": []
+    },
+    {
+      "file": "4月23日.xlsx",
+      "date_code": "0423",
+      "date": "4月23日",
+      "granularity": "day",
+      "row_count": 1745,
+      "clean_row_count": 1745,
+      "warnings": []
+    },
+    {
+      "file": "4月24日.xlsx",
+      "date_code": "0424",
+      "date": "4月24日",
+      "granularity": "day",
+      "row_count": 1770,
+      "clean_row_count": 1770,
+      "warnings": []
+    },
+    {
+      "file": "4月25日.xlsx",
+      "date_code": "0425",
+      "date": "4月25日",
+      "granularity": "day",
+      "row_count": 1720,
+      "clean_row_count": 1720,
+      "warnings": []
+    },
+    {
+      "file": "4月26日.xlsx",
+      "date_code": "0426",
+      "date": "4月26日",
+      "granularity": "day",
+      "row_count": 1685,
+      "clean_row_count": 1685,
+      "warnings": []
+    },
+    {
+      "file": "4月27日.xlsx",
+      "date_code": "0427",
+      "date": "4月27日",
+      "granularity": "day",
+      "row_count": 2048,
+      "clean_row_count": 2048,
+      "warnings": []
+    },
+    {
+      "file": "4月28日.xlsx",
+      "date_code": "0428",
+      "date": "4月28日",
+      "granularity": "day",
+      "row_count": 2128,
+      "clean_row_count": 2128,
+      "warnings": []
+    },
+    {
+      "file": "4月29日.xlsx",
+      "date_code": "0429",
+      "date": "4月29日",
+      "granularity": "day",
+      "row_count": 2153,
+      "clean_row_count": 2153,
+      "warnings": []
+    },
+    {
+      "file": "4月30日.xlsx",
+      "date_code": "0430",
+      "date": "4月30日",
+      "granularity": "day",
+      "row_count": 2179,
+      "clean_row_count": 2179,
+      "warnings": []
+    },
+    {
+      "file": "5月1日.xlsx",
+      "date_code": "0501",
+      "date": "5月1日",
+      "granularity": "day",
+      "row_count": 2048,
+      "clean_row_count": 2048,
+      "warnings": []
+    },
+    {
+      "file": "5月2日.xlsx",
+      "date_code": "0502",
+      "date": "5月2日",
+      "granularity": "day",
+      "row_count": 1993,
+      "clean_row_count": 1993,
+      "warnings": []
+    },
+    {
+      "file": "5月3日.xlsx",
+      "date_code": "0503",
+      "date": "5月3日",
+      "granularity": "day",
+      "row_count": 1980,
+      "clean_row_count": 1980,
+      "warnings": []
+    },
+    {
+      "file": "5月4日.xlsx",
+      "date_code": "0504",
+      "date": "5月4日",
+      "granularity": "day",
+      "row_count": 2012,
+      "clean_row_count": 2012,
+      "warnings": []
+    },
+    {
+      "file": "5月5日(1).xlsx",
+      "date_code": "0505",
+      "date": "5月5日",
+      "granularity": "day",
+      "row_count": 2009,
+      "clean_row_count": 2009,
+      "warnings": []
+    },
+    {
+      "file": "4月.xlsx",
+      "date_code": "month_04",
+      "date": "4月",
+      "granularity": "month",
+      "row_count": 3200,
+      "clean_row_count": 3200,
       "warnings": []
     }
   ],
@@ -68,6 +203,171 @@
       "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月19日.json",
       "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月19日.json",
       "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月19日.json"
+    },
+    {
+      "date_code": "0422",
+      "date": "4月22日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月22日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月22日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月22日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月22日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月22日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月22日.json"
+    },
+    {
+      "date_code": "0423",
+      "date": "4月23日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月23日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月23日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月23日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月23日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月23日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月23日.json"
+    },
+    {
+      "date_code": "0424",
+      "date": "4月24日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月24日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月24日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月24日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月24日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月24日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月24日.json"
+    },
+    {
+      "date_code": "0425",
+      "date": "4月25日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月25日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月25日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月25日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月25日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月25日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月25日.json"
+    },
+    {
+      "date_code": "0426",
+      "date": "4月26日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月26日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月26日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月26日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月26日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月26日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月26日.json"
+    },
+    {
+      "date_code": "0427",
+      "date": "4月27日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月27日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月27日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月27日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月27日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月27日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月27日.json"
+    },
+    {
+      "date_code": "0428",
+      "date": "4月28日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月28日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月28日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月28日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月28日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月28日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月28日.json"
+    },
+    {
+      "date_code": "0429",
+      "date": "4月29日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月29日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月29日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月29日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月29日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月29日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月29日.json"
+    },
+    {
+      "date_code": "0430",
+      "date": "4月30日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_4月30日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_4月30日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_4月30日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_4月30日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_4月30日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_4月30日.json"
+    },
+    {
+      "date_code": "0501",
+      "date": "5月1日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_5月1日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_5月1日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_5月1日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_5月1日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_5月1日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_5月1日.json"
+    },
+    {
+      "date_code": "0502",
+      "date": "5月2日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_5月2日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_5月2日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_5月2日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_5月2日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_5月2日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_5月2日.json"
+    },
+    {
+      "date_code": "0503",
+      "date": "5月3日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_5月3日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_5月3日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_5月3日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_5月3日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_5月3日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_5月3日.json"
+    },
+    {
+      "date_code": "0504",
+      "date": "5月4日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_5月4日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_5月4日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_5月4日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_5月4日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_5月4日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_5月4日.json"
+    },
+    {
+      "date_code": "0505",
+      "date": "5月5日",
+      "time_granularity": "day",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_day_5月5日.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_day_5月5日.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_day_5月5日.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_day_5月5日.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_day_5月5日.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_day_5月5日.json"
+    },
+    {
+      "date_code": "month_04",
+      "date": "4月",
+      "time_granularity": "month",
+      "province_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\province_data_month_4月.json",
+      "city_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\city_data_month_4月.json",
+      "district_data": "C:\\program1\\zej\\贵州\\宽带故障报修情况统计\\district_data_month_4月.json",
+      "mirror_province_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\province_data_month_4月.json",
+      "mirror_city_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\city_data_month_4月.json",
+      "mirror_district_data": "C:\\program1\\zej\\贵州\\运营数据监控看板\\运营数据监控看板\\data\\01statistics_table\\district_data_month_4月.json"
     }
   ]
 }
